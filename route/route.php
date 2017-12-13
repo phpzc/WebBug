@@ -15,6 +15,9 @@ Route::get('think', function () {
 
 Route::get('hello/:name', 'index/hello');
 
+Route::rule('user/login','index/user/login');
+Route::rule('user/register','index/user/register');
+
 return [
 
 ];
