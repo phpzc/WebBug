@@ -8,8 +8,4 @@ class Index extends Base
         return view('index/index');
     }
 
-    public function hello($name = 'ThinkPHP5')
-    {
-        return 'hello,' . $name;
-    }
 }
