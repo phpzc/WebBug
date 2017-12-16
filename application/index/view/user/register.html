@@ -5,7 +5,7 @@
         <div class="row">
             <div class="col-md-10 col-md-offset-1">
                 <div class="card card-signup">
-                    <h2 class="card-title text-center">Register</h2>
+                    <h2 class="card-title text-center">{:lang('Register')}</h2>
                     <div class="row">
                         <div class="col-md-5 col-md-offset-1">
                             <div class="card-content">
@@ -26,34 +26,34 @@
                         </div>
                         <div class="col-md-5">
 
-                            <form class="form" method="" action="">
+                            <form id="RegisterValidation" class="form" method="" action="">
                                 <div class="card-content">
                                     <div class="input-group">
                                                         <span class="input-group-addon">
                                                             <i class="material-icons">face</i>
                                                         </span>
 
-                                        <input type="text" class="form-control" placeholder="User Name...">
+                                        <input type="text" class="form-control" placeholder="{:lang('Username')}" name="username" required="true" >
 
                                     </div>
                                     <div class="input-group">
                                                         <span class="input-group-addon">
                                                             <i class="material-icons">email</i>
                                                         </span>
-                                        <input type="text" class="form-control" placeholder="Email...">
+                                        <input type="email" class="form-control" placeholder="{:lang('Email')}" name="email" required="true"  email="true" >
                                     </div>
                                     <div class="input-group">
                                                         <span class="input-group-addon">
                                                             <i class="material-icons">lock_outline</i>
                                                         </span>
-                                        <input type="password" placeholder="Password..." class="form-control" />
+                                        <input type="password" placeholder="{:lang('Password')}" class="form-control" name="password" maxlength="16" required="true" />
                                     </div>
 
                                     <div class="input-group">
                                                         <span class="input-group-addon">
                                                             <i class="material-icons">image</i>
                                                         </span>
-                                        <input type="text" placeholder="Code..." class="form-control" />
+                                        <input type="text" placeholder="{:lang('Code')}" class="form-control" name="code" maxlength="4" required="true"/>
 
 
                                         {:captcha_img_strong('','',['width'=>100,'height'=>40])}
@@ -61,7 +61,8 @@
 
                                 </div>
                                 <div class="footer text-center">
-                                    <a href="register.html#pablo" class="btn btn-primary btn-round">Get Started</a>
+
+                                    <input class="btn btn-primary btn-round" id="register" type="submit" value="{:lang('Register')}">
                                 </div>
                             </form>
                         </div>
@@ -72,4 +73,45 @@
     </div>
     {include file="public/bootstrap_footer" /}
 </div>
+{/block}
+{block name="footer"}
+    <script>
+
+        function setFormValidation(id) {
+            $(id).validate({
+                errorPlacement: function(error, element) {
+                    $(element).closest('div').addClass('has-error');
+                }
+            });
+        }
+
+        $(document).ready(function() {
+            setFormValidation('#RegisterValidation');
+        });
+
+
+        $(function () {
+            $('#register').click(function () {
+               $.post('/auth/register',{
+                   username:$('input[name=username]').val(),
+                   email:$('input[name=email]').val(),
+                   password:$('input[name=password]').val(),
+                   code:$('input[name=code]').val()
+               },function(data){
+                   if(data.status ==1)
+                   {
+                       location.href=data.data.url;
+                   }else{
+
+                       swal({
+                           title: "提示!",
+                           text: data.message,
+                           timer: 2000,
+                           showConfirmButton: false
+                       }).catch(swal.noop)
+                   }
+               },'json');
+            });
+        });
+    </script>
 {/block}

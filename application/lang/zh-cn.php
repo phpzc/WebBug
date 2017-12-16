@@ -7,6 +7,12 @@
  */
 return [
     'Background Images'=>'背景颜色',
-
+    'Register'=>'注册',
+    'Login'=>'登录',
+    'Dashboard'=>'仪表板',
+    'Username'=>'用户名',
+    'Email'=>'邮箱',
+    'Password'=>'密码',
+    'Code'=>'验证码',
 
 ];

@@ -16,9 +16,9 @@ class User extends BaseValidate
 {
     protected $rule = [
         'username'  =>  'unique:user|require|max:11|min:1',
-        'password' =>  'require|max:32',
+        'password' =>  'require|max:255',
 
-        'email' => 'unique:user|max:30',
+        'email' => 'unique:user|max:60',
     ];
 
     protected $message = [
@@ -27,10 +27,10 @@ class User extends BaseValidate
         'username.max'  =>  '用户名不能超过11位',
         'username.min' => '用户名不为空',
         'password.require'=>'密码不为空',
-        'password.max' =>  '密码最长32位',
+        'password.max' =>  '密码最长255位',
 
         'email.unique'=>'邮箱已存在',
-        'email.max'=>'邮箱不能超过30位',
+        'email.max'=>'邮箱不能超过60位',
 
     ];
 

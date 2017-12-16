@@ -42,17 +42,17 @@
             <ul class="nav navbar-nav navbar-right">
                 <li>
                     <a href="/dashboard">
-                        <i class="material-icons">dashboard</i> Dashboard
+                        <i class="material-icons">dashboard</i> {:lang('Dashboard')}
                     </a>
                 </li>
                 <li class="">
                     <a href="/user/register">
-                        <i class="material-icons">person_add</i> Register
+                        <i class="material-icons">person_add</i> {:lang('Register')}
                     </a>
                 </li>
                 <li class="">
                     <a href="/user/login">
-                        <i class="material-icons">fingerprint</i> Login
+                        <i class="material-icons">fingerprint</i> {:lang('Login')}
                     </a>
                 </li>
 
@@ -175,6 +175,11 @@
 <script src="__JS__/material-dashboard-v=1.2.1.js"></script>
 <!-- Material Dashboard DEMO methods, don't include it in your project! -->
 <script src="__JS__/demo.js"></script>
+
+<!--vue + axios(ajax) -->
+<script src="https://vuejs.org/js/vue.min.js"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
 <script type="text/javascript">
     $().ready(function() {
         demo.checkFullPageBackgroundImage();
@@ -185,5 +190,5 @@
         }, 700)
     });
 </script>
-
+{block name="footer"}{/block}
 </html>

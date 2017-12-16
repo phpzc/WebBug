@@ -5,20 +5,16 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-4 col-sm-6 col-md-offset-4 col-sm-offset-3">
-                    <form method="#" action="login.html#">
+                    <form id="LoginValidation" class="form" method="" action="">
                         <div class="card card-login card-hidden">
                             <div class="card-header text-center" data-background-color="rose">
-                                <h4 class="card-title">Login</h4>
+                                <h4 class="card-title">{:lang('Login')}</h4>
                                 <div class="social-line">
-                                    <a href="login.html#btn" class="btn btn-just-icon btn-simple">
-                                        <i class="fa fa-facebook-square"></i>
+
+                                    <a href="javascript:alert('暂未开放');" class="btn btn-just-icon btn-simple">
+                                        <i class="fa fa-github"></i>
                                     </a>
-                                    <a href="login.html#pablo" class="btn btn-just-icon btn-simple">
-                                        <i class="fa fa-twitter"></i>
-                                    </a>
-                                    <a href="login.html#eugen" class="btn btn-just-icon btn-simple">
-                                        <i class="fa fa-google-plus"></i>
-                                    </a>
+
                                 </div>
                             </div>
 
@@ -28,8 +24,8 @@
                                                 <i class="material-icons">face</i>
                                             </span>
                                     <div class="form-group label-floating">
-                                        <label class="control-label">User Name</label>
-                                        <input type="text" class="form-control">
+                                        <label class="control-label">{:lang('Username')}</label>
+                                        <input type="text" class="form-control" name="username">
                                     </div>
                                 </div>
 
@@ -38,13 +34,14 @@
                                                 <i class="material-icons">lock_outline</i>
                                             </span>
                                     <div class="form-group label-floating">
-                                        <label class="control-label">Password</label>
-                                        <input type="password" class="form-control">
+                                        <label class="control-label">{:lang('Password')}</label>
+                                        <input type="password" class="form-control" name="password">
                                     </div>
                                 </div>
                             </div>
                             <div class="footer text-center">
-                                <button type="submit" class="btn btn-rose btn-simple btn-wd btn-lg">Let's go</button>
+
+                                <input class="btn btn-primary btn-round" id="login" type="button" value="{:lang('Login')}">
                             </div>
                         </div>
                     </form>
@@ -55,4 +52,43 @@
 
     {include file="public/bootstrap_footer" /}
 </div>
+{/block}
+{block name="footer"}
+<script>
+
+    function setFormValidation(id) {
+        $(id).validate({
+            errorPlacement: function(error, element) {
+                $(element).closest('div').addClass('has-error');
+            }
+        });
+    }
+
+    $(document).ready(function() {
+        setFormValidation('#LoginValidation');
+    });
+
+
+    $(function () {
+        $('#login').click(function () {
+            $.post('/auth/login',{
+                username:$('input[name=username]').val(),
+                password:$('input[name=password]').val(),
+            },function(data){
+                if(data.status ==1)
+                {
+                    location.href=data.data.url;
+                }else{
+
+                    swal({
+                        title: "提示!",
+                        text: data.message,
+                        timer: 2000,
+                        showConfirmButton: false
+                    }).catch(swal.noop)
+                }
+            },'json');
+        });
+    });
+</script>
 {/block}

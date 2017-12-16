@@ -10,6 +10,8 @@ namespace app\index\service;
 
 
 use app\index\model\User as UserModel;
+use app\index\validate\User as UserValidate;
+use think\facade\Request;
 
 class Auth
 {
@@ -73,9 +75,10 @@ class Auth
      *
      * @param $username
      * @param $password
+     * @param $email
      * @return ServiceResult
      */
-    public static function register($username,$password)
+    public static function register($username,$password,$email)
     {
         $model = new UserModel();
 
@@ -84,14 +87,24 @@ class Auth
         try{
             //创建用户
             //validate data 数据校验 在验证器中验证
-            $model->validate('User.add');
-            $model->allowField(['username','password','create_time','phone','phone_status']);
+            //$model->validate('User.add');
+            $validate = new UserValidate();
+
+            if(!$validate->check([
+                'username'=>$username,
+                'password'=>$password,
+                'email'=>$email,
+            ]))
+            {
+                return ServiceResult::Error($validate->getError());
+            }
+
+            $model->allowField(['username','password','email','create_ip']);
             $add = $model->save([
                 'username'=>$username,
                 'password'=>$password,
-                'phone'=>$username,
-                'phone_status'=>1,
-
+                'email'=>$email,
+                'create_ip'=>Request::ip(),
             ]);
 
             //创建其他
@@ -110,7 +123,9 @@ class Auth
 
         if($add)
         {
-            return ServiceResult::Success(['id'=>$model->user_id],'注册成功');
+            self::addAuth($model->id,$username);
+
+            return ServiceResult::Success(['id'=>$model->id,'url'=>'/'],'注册成功');
 
         }else{
 
@@ -129,7 +144,7 @@ class Auth
      */
     public static function login($username,$password)
     {
-        $user = UserModel::get(['username'=>$username]);
+        $user = UserModel::getByUsername($username);
 
         if(!$user)
         {
@@ -142,10 +157,9 @@ class Auth
             //登陆成功
             $data = $user->toArray();
 
+            $data['url'] = '/';
 
-            session('user_id',$data['user_id']);
-            session('username',$data['username']);
-
+            self::addAuth($data['id'],$data['username']);
 
             return ServiceResult::Success($data,'登陆成功');
         }
@@ -156,4 +170,26 @@ class Auth
         }
     }
 
+    /**
+     * 添加授权
+     * @param $id
+     * @param $username
+     */
+    public static function addAuth($id,$username)
+    {
+        session('id',$id);
+        session('username',$username);
+    }
+
+    /**
+     * 取得授权信息
+     * @return array
+     */
+    public static function getAuth()
+    {
+        return [
+            'id'=>session('id'),
+            'username'=>session('username'),
+        ];
+    }
 }
