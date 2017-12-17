@@ -17,8 +17,10 @@ Route::get('hello/:name', 'index/hello');
 
 Route::rule('user/login','index/user/login');
 Route::rule('user/register','index/user/register');
-Route::rule('auth/register','index/auth/register');
-Route::rule('auth/login','index/auth/login');
+Route::rule('base/register','index/base/register');
+Route::rule('base/login','index/base/login');
+Route::rule('dashboard','index/dashboard/index');
+
 return [
 
 ];

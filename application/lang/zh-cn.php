@@ -14,5 +14,8 @@ return [
     'Email'=>'邮箱',
     'Password'=>'密码',
     'Code'=>'验证码',
+    'My Profile'=>'我的简历',
+    'Edit Profile'=>'修改简历',
+    'Settings'=>'设置',
 
 ];

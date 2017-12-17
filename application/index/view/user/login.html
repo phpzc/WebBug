@@ -71,7 +71,7 @@
 
     $(function () {
         $('#login').click(function () {
-            $.post('/auth/login',{
+            $.post('/base/login',{
                 username:$('input[name=username]').val(),
                 password:$('input[name=password]').val(),
             },function(data){

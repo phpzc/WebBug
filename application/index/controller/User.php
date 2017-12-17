@@ -8,7 +8,7 @@
 
 namespace app\index\controller;
 
-class User extends Auth
+class User extends Base
 {
     public function login()
     {
