@@ -17,5 +17,7 @@ return [
     'My Profile'=>'我的简历',
     'Edit Profile'=>'修改简历',
     'Settings'=>'设置',
+    'Project List'=>'项目列表',
+    'Bug List'=>'Bug列表',
 
 ];

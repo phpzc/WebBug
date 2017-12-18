@@ -11,8 +11,11 @@ namespace app\index\controller;
 
 class Dashboard extends Auth
 {
+
+
     public function index()
     {
+        $this->assign('title',lang('Dashboard'));
 
         return view('dashboard/index');
     }
