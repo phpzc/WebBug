@@ -22,6 +22,7 @@ class Project extends Auth
         $this->assign('list', $list);
         $this->assign('page', $page);
         $this->assign('title',lang('Project List'));
+        $this->assign('menu_nav','project/index');
 
         return view('project/index');
     }
@@ -42,6 +43,7 @@ class Project extends Auth
         {
             $this->assign('project',ProjectModel::get($this->request->param('id')));
             $this->assign('title',lang('Edit Project'));
+            $this->assign('menu_nav','project/index');
             return view('project/edit');
         }else{
             return ProjectService::edit($this->request->param('project_name'),$this->user_id,$this->request->param('id'));
@@ -53,5 +55,18 @@ class Project extends Auth
     public function delete()
     {
         return ProjectService::delete($this->request->param('id'),$this->user_id);
+    }
+
+
+    /**
+     * 项目详情
+     */
+    public function main()
+    {
+        //todo BUG列表 BUG统计 项目版本 模块
+
+
+        $this->assign('menu_nav','project/index');
+        return view('project/main');
     }
 }

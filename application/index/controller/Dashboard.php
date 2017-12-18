@@ -16,7 +16,7 @@ class Dashboard extends Auth
     public function index()
     {
         $this->assign('title',lang('Dashboard'));
-
+        $this->assign('menu_nav','dashboard');
         return view('dashboard/index');
     }
 }

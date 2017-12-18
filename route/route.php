@@ -20,7 +20,8 @@ Route::rule('user/register','index/user/register');
 Route::rule('base/register','index/base/register');
 Route::rule('base/login','index/base/login');
 Route::rule('dashboard','index/dashboard/index');
-Route::rule('project/index','project/index');
+Route::rule('project/index','index/project/index');
+Route::rule('project/main','index/project/main');
 return [
 
 ];

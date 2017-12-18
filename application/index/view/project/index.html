@@ -29,11 +29,15 @@
                                 <td class="text-right">{$project.create_time}</td>
                                 <td class="td-actions text-right">
 
-                                    <button type="button" rel="tooltip" class="btn btn-success edit-project" data-id="{$project.id}">
+                                    <button type="button" rel="tooltip" class="btn btn-success main-project" data-id="{$project.id}" title="进入项目">
+                                        <i class="material-icons">people</i>
+                                    </button>
+
+                                    <button type="button" rel="tooltip" class="btn btn-success edit-project" data-id="{$project.id}" title="修改">
                                         <i class="material-icons">edit</i>
                                     </button>
                                     &nbsp;
-                                    <button type="button" rel="tooltip" class="btn btn-danger delete-project"  data-id="{$project.id}">
+                                    <button type="button" rel="tooltip" class="btn btn-danger delete-project"  data-id="{$project.id}" title="删除">
                                         <i class="material-icons">close</i>
                                     </button>
                                 </td>
@@ -119,7 +123,7 @@
         });
 
         $('.delete-project').click(function () {
-
+            var that = $(this);
             swal({
                 title: 'Are you sure?',
                 text: '删除这个项目!',
@@ -131,19 +135,46 @@
                 cancelButtonClass: "btn btn-danger",
                 buttonsStyling: false
             }).then(function() {
-                swal({
-                    title: 'Deleted!',
-                    text: 'Your imaginary file has been deleted.',
-                    type: 'success',
-                    confirmButtonClass: "btn btn-success",
-                    buttonsStyling: false
-                }).catch(swal.noop)
+
+
+                axios.post('/index/project/delete', {
+                    id:that.data('id'),
+                }).then(function (response) {
+
+                    if(response.data.status == 1){
+                        swal({
+                            title: 'Deleted!',
+                            text: response.data.message,
+                            type: 'success',
+                            confirmButtonClass: "btn btn-success",
+                            buttonsStyling: false
+                        }).catch(swal.noop)
+
+                        setTimeout(function () {
+                            location.href = '/project/index';
+                        },1500);
+                    }else{
+                        swal({
+                            title: 'Cancelled',
+                            text: '操作已取消.'+response.data.message,
+                            type: 'error',
+                            confirmButtonClass: "btn btn-info",
+                            buttonsStyling: false
+                        }).catch(swal.noop)
+                    }
+
+
+                }).catch(function (error) {
+                    console.log(error);
+                });
+
+
             }, function(dismiss) {
                 // dismiss can be 'overlay', 'cancel', 'close', 'esc', 'timer'
                 if (dismiss === 'cancel') {
                     swal({
                         title: 'Cancelled',
-                        text: 'Your imaginary file is safe :)',
+                        text: '操作已取消.)',
                         type: 'error',
                         confirmButtonClass: "btn btn-info",
                         buttonsStyling: false
@@ -151,7 +182,10 @@
                 }
             })
 
-            window.location.href='/index/project/delete?id='+$(this).data('id');
+        });
+
+        $('.main-project').click(function () {
+            location.href = '/project/main?id='+$(this).data('id');
         });
     });
 </script>

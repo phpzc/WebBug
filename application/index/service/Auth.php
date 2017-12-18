@@ -44,6 +44,18 @@ class Auth
     public static function updatePasswordV2($username,$newPassword)
     {
         $user = UserModel::get(['username'=>$username]);
+
+        $validate = new UserValidate();
+
+        if(!$validate->scene('edit_password')->check([
+
+            'password'=>$newPassword,
+
+        ]))
+        {
+            return ServiceResult::Error($validate->getError());
+        }
+
         $user->password = $newPassword;
 
         if($user->save() !== false)
@@ -90,7 +102,7 @@ class Auth
             //$model->validate('User.add');
             $validate = new UserValidate();
 
-            if(!$validate->check([
+            if(!$validate->scene('add')->check([
                 'username'=>$username,
                 'password'=>$password,
                 'email'=>$email,

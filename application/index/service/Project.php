@@ -23,7 +23,7 @@ class Project
 
             $validate = new ProjectValidate();
 
-            if(!$validate->check([
+            if(!$validate->scene('add')->check([
                 'project_name'=>$project_name,
             ]))
             {
@@ -78,7 +78,7 @@ class Project
 
             $validate = new ProjectValidate();
 
-            if(!$validate->check([
+            if(!$validate->scene('edit')->check([
                 'project_name'=>$project_name,
             ]))
             {
