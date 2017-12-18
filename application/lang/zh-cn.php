@@ -19,5 +19,9 @@ return [
     'Settings'=>'设置',
     'Project List'=>'项目列表',
     'Bug List'=>'Bug列表',
+    'Project Name'=>'项目名称',
+    'Create Project'=>'创建项目',
+    'Edit Project'=>'修改项目',
+    'Submit'=>'提交',
 
 ];

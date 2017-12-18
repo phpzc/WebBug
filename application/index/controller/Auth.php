@@ -19,8 +19,15 @@ class Auth extends Base
 
         if(!$this->isLogin())
         {
-            header('Location:'.$this->request->domain());
-            exit;
+            if($this->request->isAjax())
+            {
+                echo json(['status'=>0,'message'=>'请登录',],JSON_UNESCAPED_UNICODE);
+                exit;
+            }else{
+                header('Location:'.$this->request->domain());
+                exit;
+            }
+
         }
     }
 

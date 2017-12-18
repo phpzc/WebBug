@@ -1,0 +1,158 @@
+{extend name="extend/main" /}
+{block name="content"}
+<div class="container-fluid">
+    <div class="row">
+        <!-- project list -->
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header card-header-text" data-background-color="rose">
+                    <h4 class="card-title">{:lang('Project List')}</h4>
+                </div>
+                <div class="card-content">
+
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th class="text-center">#</th>
+                                <th>{:lang('Project Name')}</th>
+                                <th class="text-right">Time</th>
+                                <th class="text-right">Actions</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {volist name='list' id='project'}
+
+                            <tr>
+                                <td class="text-center">{$project.id}</td>
+                                <td>{$project.project_name}</td>
+                                <td class="text-right">{$project.create_time}</td>
+                                <td class="td-actions text-right">
+
+                                    <button type="button" rel="tooltip" class="btn btn-success edit-project" data-id="{$project.id}">
+                                        <i class="material-icons">edit</i>
+                                    </button>
+                                    &nbsp;
+                                    <button type="button" rel="tooltip" class="btn btn-danger delete-project"  data-id="{$project.id}">
+                                        <i class="material-icons">close</i>
+                                    </button>
+                                </td>
+                            </tr>
+                            {/volist}
+
+                            </tbody>
+                        </table>
+                    </div>
+
+                    {$page|raw}
+                </div>
+            </div>
+        </div>
+
+        <!-- project form -->
+        <div class="col-md-12">
+            <div class="card">
+                <form method="post" action="" class="form-horizontal">
+                    <div class="card-header card-header-text" data-background-color="rose">
+                        <h4 class="card-title">{:lang('Create Project')}</h4>
+                    </div>
+                    <div class="card-content">
+                        <div class="row">
+                            <label class="col-sm-2 label-on-left">{:lang('Project Name')}</label>
+                            <div class="col-sm-10">
+                                <div class="form-group label-floating is-empty">
+                                    <label class="control-label"></label>
+                                    <input type="text" class="form-control" name="project_name" value="" required="true" />
+                                    <span class="help-block">{:lang('Project Name')}.</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <label class="col-sm-2 label-on-left"></label>
+                            <div class="col-sm-10">
+                                <div class="form-group label-floating is-empty">
+                                    <label class="control-label"></label>
+                                    <input type="button" class="btn btn-success" id="add_project" value="{:lang('Submit')}">
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </form>
+            </div>
+        </div>
+
+    </div>
+</div>
+{/block}
+{block name="footer"}
+<script>
+    $(function () {
+        $('#add_project').click(function () {
+
+            axios.post('/index/project/create', {
+                project_name:$('input[name=project_name]').val()
+            }).then(function (response) {
+                swal({
+                    title: "提示!",
+                    text: response.data.message,
+                    timer: 2000,
+                    showConfirmButton: false
+                }).catch(swal.noop)
+
+                if(response.data.status == 1)
+                {
+                    setTimeout(function(){
+                        location.href = '/project/index';
+                    },2100);
+                }
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+
+        })
+
+        $('.edit-project').click(function () {
+            window.location.href='/index/project/edit?id='+$(this).data('id');
+        });
+
+        $('.delete-project').click(function () {
+
+            swal({
+                title: 'Are you sure?',
+                text: '删除这个项目!',
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, delete it!',
+                cancelButtonText: 'No, keep it',
+                confirmButtonClass: "btn btn-success",
+                cancelButtonClass: "btn btn-danger",
+                buttonsStyling: false
+            }).then(function() {
+                swal({
+                    title: 'Deleted!',
+                    text: 'Your imaginary file has been deleted.',
+                    type: 'success',
+                    confirmButtonClass: "btn btn-success",
+                    buttonsStyling: false
+                }).catch(swal.noop)
+            }, function(dismiss) {
+                // dismiss can be 'overlay', 'cancel', 'close', 'esc', 'timer'
+                if (dismiss === 'cancel') {
+                    swal({
+                        title: 'Cancelled',
+                        text: 'Your imaginary file is safe :)',
+                        type: 'error',
+                        confirmButtonClass: "btn btn-info",
+                        buttonsStyling: false
+                    }).catch(swal.noop)
+                }
+            })
+
+            window.location.href='/index/project/delete?id='+$(this).data('id');
+        });
+    });
+</script>
+{/block}

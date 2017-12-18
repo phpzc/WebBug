@@ -19,16 +19,28 @@ if(!function_exists('captcha_img_strong'))
      */
     function captcha_img_strong($id = '',$className ='',$widthHeightArray = [])
     {
+
         if(!empty($widthHeightArray)){
             $img=<<<EOT
     <img src="%s" onclick="this.src='%s?r='+Math.random()" alt="captcha" class="%s" style="cursor: pointer;z-index:100;position:absolute;right:0;bottom:5px;width: %spx;height: %spx"/>
 EOT;
-            return sprintf($img,'/index/auth/verify/id/'.$id,'/index/auth/verify/id/'.$id,$className,$widthHeightArray['width'],$widthHeightArray['height']);
+
+            if($id == '')
+            {
+                return sprintf($img,'/index/base/verify','/index/base/verify',$className,$widthHeightArray['width'],$widthHeightArray['height']);
+            }else{
+                return sprintf($img,'/index/base/verify/id/'.$id,'/index/base/verify/id/'.$id,$className,$widthHeightArray['width'],$widthHeightArray['height']);
+            }
         }else{
             $img=<<<EOT
     <img src="%s" onclick="this.src='%s?r='+Math.random()" alt="captcha" style="cursor: pointer" class="%s" />
 EOT;
-            return sprintf($img,captcha_src($id),captcha_src($id),$className);
+            if($id == '')
+            {
+                return sprintf($img,'/index/base/verify','/index/base/verify',$className);
+            }else{
+                return sprintf($img,'/index/base/verify/id/'.$id,'/index/auth/verify/id/'.$id,$className);
+            }
         }
 
 

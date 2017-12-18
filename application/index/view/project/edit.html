@@ -1,0 +1,72 @@
+{extend name="extend/main" /}
+{block name="content"}
+<div class="container-fluid">
+    <div class="row">
+        <!-- project form -->
+        <div class="col-md-12">
+            <div class="card">
+                <form method="post" action="" class="form-horizontal">
+                    <div class="card-header card-header-text" data-background-color="rose">
+                        <h4 class="card-title">{:lang('Edit Project')}</h4>
+                    </div>
+                    <div class="card-content">
+                        <div class="row">
+                            <label class="col-sm-2 label-on-left">{:lang('Project Name')}</label>
+                            <div class="col-sm-10">
+                                <div class="form-group label-floating is-empty">
+                                    <label class="control-label"></label>
+                                    <input type="text" class="form-control" name="project_name" value="{$project.project_name}" required="true" />
+                                    <span class="help-block">{:lang('Project Name')}.</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <label class="col-sm-2 label-on-left"></label>
+                            <div class="col-sm-10">
+                                <div class="form-group label-floating is-empty">
+                                    <label class="control-label"></label>
+                                    <input type="button" class="btn btn-success" id="add_project" value="{:lang('Submit')}">
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </form>
+            </div>
+        </div>
+
+    </div>
+</div>
+{/block}
+{block name="footer"}
+<script>
+    $(function () {
+        $('#add_project').click(function () {
+
+            axios.post('/index/project/edit', {
+                project_name:$('input[name=project_name]').val(),
+                id:'{$project.id}'
+            }).then(function (response) {
+                swal({
+                    title: "提示!",
+                    text: response.data.message,
+                    timer: 2000,
+                    showConfirmButton: false
+                }).catch(swal.noop)
+
+                if(response.data.status == 1)
+                {
+                    setTimeout(function(){
+                        location.href = '/project/index';
+                    },2100);
+                }
+            })
+                .catch(function (error) {
+                    console.log(error);
+                });
+
+        })
+    });
+</script>
+{/block}
