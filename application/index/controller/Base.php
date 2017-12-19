@@ -78,6 +78,15 @@ class Base extends Error
         return $register;
     }
 
+    public function logout()
+    {
+        session(null);
+        cookie(null);
+
+        return redirect('/');
+    }
+
+
     protected function isLogin()
     {
         return $this->user_id > 0;

@@ -1,0 +1,76 @@
+{extend name="extend/main" /}
+{block name="content"}
+<div class="container-fluid">
+    <div class="row">
+        <!-- profile form -->
+        <div class="col-md-12">
+            <div class="card">
+                <form method="post" action="" class="form-horizontal">
+                    <div class="card-header card-header-text" data-background-color="rose">
+                        <h4 class="card-title">{:lang('Edit Profile')}</h4>
+                    </div>
+                    <div class="card-content">
+                        <div class="row">
+                            <label class="col-sm-2 label-on-left">User</label>
+                            <div class="col-sm-10">
+                                <div class="form-group label-floating is-empty">
+                                    <label class="control-label"></label>
+                                    <input type="text" class="form-control"  value="{$user.username}" required="true" readonly/>
+                                    <span class="help-block">{:lang('Username')}.</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <label class="col-sm-2 label-on-left">{:lang('Nick Name')}</label>
+                            <div class="col-sm-10">
+                                <div class="form-group label-floating is-empty">
+                                    <label class="control-label"></label>
+                                    <input type="text" class="form-control" name="nickname" value="{$user.nickname}" required="true" />
+                                    <span class="help-block">{:lang('Nick Name')}.</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <label class="col-sm-2 label-on-left"></label>
+                            <div class="col-sm-10">
+                                <div class="form-group label-floating is-empty">
+                                    <label class="control-label"></label>
+                                    <input type="button" class="btn btn-success" id="update_profile" value="{:lang('Submit')}">
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </form>
+            </div>
+        </div>
+
+    </div>
+</div>
+{/block}
+{block name="footer"}
+<script>
+    $(function () {
+        $('#update_profile').click(function () {
+
+            axios.post('/profile', {
+                nickname:$('input[name=nickname]').val()
+            }).then(function (response) {
+                console.log(response);
+                swal({
+                    title: "提示!",
+                    text: response.data.message,
+                    timer: 2000,
+                    showConfirmButton: false
+                }).catch(swal.noop)
+
+            })
+                .catch(function (error) {
+                    console.log(error);
+                });
+
+        })
+    });
+</script>
+{/block}

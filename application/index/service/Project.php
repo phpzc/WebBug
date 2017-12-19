@@ -9,6 +9,8 @@
 namespace app\index\service;
 
 use app\index\model\Project as ProjectModel;
+use app\index\model\ProjectModule;
+use app\index\model\ProjectVersion;
 use app\index\validate\Project as ProjectValidate;
 use think\facade\Request;
 
@@ -36,6 +38,16 @@ class Project
                 'user_id'=>$user_id,
                 'create_ip'=>Request::ip(),
             ]);
+
+            $m = new ProjectModule();
+            $v = new ProjectVersion();
+            $m->project_id = $model->id;
+            $v->project_id = $model->id;
+            $m->module_name = '默认';
+            $v->version_name = '默认';
+            $m->save();
+            $v->save();
+
 
             $model->commit();
         }

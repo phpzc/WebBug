@@ -23,5 +23,9 @@ return [
     'Create Project'=>'创建项目',
     'Edit Project'=>'修改项目',
     'Submit'=>'提交',
+    'Edit Profile'=>'修改个人信息',
+    'Nick Name'=>'昵称',
+    'Project Version'=>'项目版本',
+    'Project Module'=>'项目模块',
 
 ];

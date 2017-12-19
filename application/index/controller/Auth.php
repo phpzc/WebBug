@@ -21,7 +21,7 @@ class Auth extends Base
         {
             if($this->request->isAjax())
             {
-                echo json(['status'=>0,'message'=>'请登录',],JSON_UNESCAPED_UNICODE);
+                echo json(['status'=>0,'message'=>'请登录',]);
                 exit;
             }else{
                 header('Location:'.$this->request->domain());
@@ -29,6 +29,9 @@ class Auth extends Base
             }
 
         }
+
+
+        $this->assign('menu_nav','');
     }
 
 }

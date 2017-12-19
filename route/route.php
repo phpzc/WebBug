@@ -22,6 +22,8 @@ Route::rule('base/login','index/base/login');
 Route::rule('dashboard','index/dashboard/index');
 Route::rule('project/index','index/project/index');
 Route::rule('project/main','index/project/main');
+Route::rule('profile','index/profile/index');
+Route::rule('logout','index/base/logout');
 return [
 
 ];

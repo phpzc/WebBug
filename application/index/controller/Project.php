@@ -8,8 +8,13 @@
 
 namespace app\index\controller;
 
+use app\index\model\ProjectModule;
+use app\index\model\ProjectVersion;
 use app\index\service\Project as ProjectService;
 use app\index\model\Project as ProjectModel;
+use app\index\model\ProjectModule as ProjectModuleModel;
+use app\index\model\ProjectVersion as ProjectVersionModel;
+
 class Project extends Auth
 {
 
@@ -41,6 +46,11 @@ class Project extends Auth
     {
         if($this->request->isGet())
         {
+            //module version
+
+
+            $this->assign('module',ProjectModuleModel::all(['project_id'=>$this->request->param('id')]));
+            $this->assign('version',ProjectVersionModel::all(['project_id'=>$this->request->param('id')]));
             $this->assign('project',ProjectModel::get($this->request->param('id')));
             $this->assign('title',lang('Edit Project'));
             $this->assign('menu_nav','project/index');

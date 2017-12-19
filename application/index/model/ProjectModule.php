@@ -11,5 +11,6 @@ namespace app\index\model;
 
 class ProjectModule extends BaseModel
 {
+    protected $autoWriteTimestamp = 'datetime';
 
 }

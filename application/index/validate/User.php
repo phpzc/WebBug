@@ -18,7 +18,8 @@ class User extends BaseValidate
         'username'  =>  'unique:user|require|max:11|min:1',
         'password' =>  'require|max:255',
 
-        'email' => 'unique:user|max:60',
+        'email' => 'unique:user|require|max:60',
+        'nickname' => 'unique:user|require|max:32'
     ];
 
     protected $message = [
@@ -31,6 +32,11 @@ class User extends BaseValidate
 
         'email.unique'=>'邮箱已存在',
         'email.max'=>'邮箱不能超过60位',
+        'email.require'=>'邮箱不为空',
+
+        'nickname.unique'=>'昵称已存在',
+        'nickname.max'=>'昵称不能超过32位',
+        'nickname.require'=>'昵称不为空',
 
     ];
 
@@ -39,5 +45,6 @@ class User extends BaseValidate
         'add'   =>  ['username','password'],
         'edit_password'  => ['password'],
         'edit_email' => ['email'],
+        'update_profile'=>['nickname'],
     ];
 }
