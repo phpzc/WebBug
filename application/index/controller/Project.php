@@ -15,6 +15,10 @@ use app\index\model\Project as ProjectModel;
 use app\index\model\ProjectModule as ProjectModuleModel;
 use app\index\model\ProjectVersion as ProjectVersionModel;
 
+use app\index\service\ProjectModule as ProjectModuleService;
+use app\index\service\ProjectVersion as ProjectVersionService;
+
+
 class Project extends Auth
 {
 
@@ -79,4 +83,56 @@ class Project extends Auth
         $this->assign('menu_nav','project/index');
         return view('project/main');
     }
+
+    /**
+     * 修改项目模块名称
+     */
+    public function edit_module()
+    {
+        return ProjectModuleService::edit($this->request->param('id','0'),$this->user_id,$this->request->param('module_name'));
+    }
+
+    /**
+     * 修改项目版本名称
+     */
+    public function edit_version()
+    {
+        return ProjectVersionService::edit($this->request->param('id','0'),$this->user_id,$this->request->param('version_name'));
+    }
+
+
+    /**
+     * 删除项目模块
+     */
+    public function del_module()
+    {
+        return ProjectModuleService::delete($this->request->param('id','0'),$this->user_id);
+    }
+
+
+    /**
+     * 删除项目版本
+     */
+    public function del_version()
+    {
+        return ProjectVersionService::delete($this->request->param('id','0'),$this->user_id);
+    }
+
+    /**
+     * 添加项目模块
+     */
+    public function add_module()
+    {
+        return ProjectModuleService::add($this->request->param('module_name'),$this->request->param('project_id','0'),$this->user_id);
+    }
+
+
+    /**
+     * 添加项目版本
+     */
+    public function add_version()
+    {
+        return ProjectVersionService::add($this->request->param('version_name'),$this->request->param('project_id','0'),$this->user_id);
+    }
+
 }

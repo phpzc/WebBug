@@ -27,5 +27,11 @@ return [
     'Nick Name'=>'昵称',
     'Project Version'=>'项目版本',
     'Project Module'=>'项目模块',
-
+    'Edit Project Module'=>'修改项目模块名称',
+    'Edit Project Version'=>'修改项目版本名称',
+    'Delete Project Module'=>'删除项目模块名称',
+    'Delete Project Version'=>'删除项目版本名称',
+    'New Module'=>'新建模块',
+    'New Version'=>'新建版本',
+    'Default'=>'默认',
 ];

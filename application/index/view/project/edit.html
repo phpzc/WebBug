@@ -59,23 +59,28 @@
                                 </tr>
                                 </thead>
                                 <tbody>
+                                {volist name="version" id="item"}
+
                                 <tr>
-                                    <td class="text-center">1</td>
-                                    <td>Andrew Mike</td>
+                                    <td class="text-center">{$item.id}</td>
+                                    <td>{$item.version_name}</td>
 
                                     <td class="td-actions text-right">
-                                        <button type="button" rel="tooltip" class="btn btn-info">
-                                            <i class="material-icons">person</i>
-                                        </button>
-                                        <button type="button" rel="tooltip" class="btn btn-success">
+
+                                        <button type="button" rel="tooltip" class="btn btn-success edit_version" data-id="{$item.id}" data-name="{$item.version_name}"  title="修改">
                                             <i class="material-icons">edit</i>
                                         </button>
-                                        <button type="button" rel="tooltip" class="btn btn-danger">
+                                        <button type="button" rel="tooltip" class="btn btn-danger del_version" data-id="{$item.id}" title="删除">
                                             <i class="material-icons">close</i>
                                         </button>
                                     </td>
                                 </tr>
+                                {/volist}
 
+                                <tr><td></td><td></td><td><button type="button" rel="tooltip" class="btn btn-success pull-right new_version">
+                                    <i class="material-icons">add</i>
+                                    {:lang('New Version')}
+                                </button></td></tr>
                                 </tbody>
                             </table>
                         </div>
@@ -102,23 +107,28 @@
                                 </tr>
                                 </thead>
                                 <tbody>
+
+                                {volist name="module" id="item"}
                                 <tr>
-                                    <td class="text-center">1</td>
-                                    <td>Andrew Mike</td>
+                                    <td class="text-center">{$item.id}</td>
+                                    <td>{$item.module_name}</td>
 
                                     <td class="td-actions text-right">
-                                        <button type="button" rel="tooltip" class="btn btn-info">
-                                            <i class="material-icons">person</i>
-                                        </button>
-                                        <button type="button" rel="tooltip" class="btn btn-success">
+
+                                        <button type="button" rel="tooltip" class="btn btn-success edit_module" data-id="{$item.id}" data-name="{$item.module_name}" title="修改">
                                             <i class="material-icons">edit</i>
                                         </button>
-                                        <button type="button" rel="tooltip" class="btn btn-danger">
+                                        <button type="button" rel="tooltip" class="btn btn-danger del_module" data-id="{$item.id}" title="删除">
                                             <i class="material-icons">close</i>
                                         </button>
                                     </td>
                                 </tr>
+                                {/volist}
 
+                                <tr><td></td><td></td><td><button type="button" rel="tooltip" class="btn btn-success pull-right new_module">
+                                    <i class="material-icons">add</i>
+                                    {:lang('New Module')}
+                                </button></td></tr>
                                 </tbody>
                             </table>
                         </div>
@@ -158,6 +168,258 @@
                 });
 
         })
+
+
+        //修改模块
+        $('.edit_module').click(function(){
+
+            var name = $(this).data('name');
+            var id = $(this).data('id');
+
+            swal({
+                title: '{:lang("Edit Project Module")}',
+                html: '<div class="form-group">' +
+                '<input id="input-field" type="text" class="form-control text-center" name="module_name" value="'+name+'"/>' +
+                '</div>',
+                showCancelButton: true,
+                confirmButtonClass: 'btn btn-success',
+                cancelButtonClass: 'btn btn-danger',
+                buttonsStyling: false
+            }).then(function(result) {
+
+                axios.post('/index/project/edit_module', {
+                    module_name:$('#input-field').val(),
+                    id:id
+                }).then(function (response) {
+
+                    swal({
+                        type: 1 == response.data.status  ?'success':'error',
+                        html: response.data.message,
+                        confirmButtonClass: 'btn btn-success',
+                        buttonsStyling: false
+
+                    })
+
+                    if(response.data.status == 1)
+                    {
+                        setTimeout(function () {
+                            window.location.reload()
+                        },1500)
+
+                    }
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+
+
+            }).catch(swal.noop)
+        });
+
+        //修改版本
+        $('.edit_version').click(function(){
+            var name = $(this).data('name');
+            var id = $(this).data('id');
+
+            swal({
+                title: '{:lang("Edit Project Version")}',
+                html: '<div class="form-group">' +
+                '<input id="input-field" type="text" class="form-control text-center" name="version_name" value="'+name+'"/>' +
+                '</div>',
+                showCancelButton: true,
+                confirmButtonClass: 'btn btn-success',
+                cancelButtonClass: 'btn btn-danger',
+                buttonsStyling: false
+            }).then(function(result) {
+                axios.post('/index/project/edit_version', {
+                    version_name:$('#input-field').val(),
+                    id:id
+                }).then(function (response) {
+
+                    swal({
+                        type: 1 == response.data.status  ?'success':'error',
+                        html: response.data.message,
+                        confirmButtonClass: 'btn btn-success',
+                        buttonsStyling: false
+
+                    })
+
+                    if(response.data.status == 1)
+                    {
+                        setTimeout(function () {
+                            window.location.reload()
+                        },1500)
+                    }
+                })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+            }).catch(swal.noop)
+        });
+
+        //删除模块
+        $('.del_module').click(function(){
+
+            var id = $(this).data('id');
+
+            swal({
+                title: '{:lang("Delete Project Module")}',
+                text: 'Are you sure delete it?',
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonClass: 'btn btn-success',
+                cancelButtonClass: 'btn btn-danger',
+                confirmButtonText: 'Yes, delete it!',
+                cancelButtonText: 'No, keep it',
+                buttonsStyling: false
+
+            }).then(function(result) {
+                axios.post('/index/project/del_module', {
+                    version_name:$('#input-field').val(),
+                    id:id
+                }).then(function (response) {
+
+                    swal({
+                        type: 1 == response.data.status  ?'success':'error',
+                        html: response.data.message,
+                        confirmButtonClass: 'btn btn-success',
+                        buttonsStyling: false
+
+                    })
+
+                    if(response.data.status == 1)
+                    {
+                        setTimeout(function () {
+                            window.location.reload()
+                        },1500)
+                    }
+                })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+            }).catch(swal.noop)
+        });
+
+
+        //删除版本
+        $('.del_version').click(function(){
+            var id = $(this).data('id');
+
+            swal({
+                title: '{:lang("Delete Project Version")}',
+                text: 'Are you sure delete it?',
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonClass: 'btn btn-success',
+                cancelButtonClass: 'btn btn-danger',
+                confirmButtonText: 'Yes, delete it!',
+                cancelButtonText: 'No, keep it',
+                buttonsStyling: false
+            }).then(function(result) {
+                axios.post('/index/project/del_version', {
+
+                    id:id
+                }).then(function (response) {
+
+                    swal({
+                        type: 1 == response.data.status  ?'success':'error',
+                        html: response.data.message,
+                        confirmButtonClass: 'btn btn-success',
+                        buttonsStyling: false
+
+                    })
+
+                    if(response.data.status == 1)
+                    {
+                        setTimeout(function () {
+                            window.location.reload()
+                        },1500)
+                    }
+                })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+            }).catch(swal.noop)
+        });
+
+
+        //新建模块
+        $('.new_module').click(function(){
+
+            swal({
+                title: '{:lang("New Module")}',
+                html: '<div class="form-group">' +
+                '<input id="input-field" type="text" class="form-control text-center" name="module_name" value=""/>' +
+                '</div>',
+                showCancelButton: true,
+                confirmButtonClass: 'btn btn-success',
+                cancelButtonClass: 'btn btn-danger',
+                buttonsStyling: false
+            }).then(function(result) {
+                axios.post('/index/project/add_module', {
+                    module_name:$('#input-field').val(),
+                    project_id:'{$project.id}'
+                }).then(function (response) {
+
+                    swal({
+                        type: 1 == response.data.status  ?'success':'error',
+                        html: response.data.message,
+                        confirmButtonClass: 'btn btn-success',
+                        buttonsStyling: false
+
+                    })
+
+                    if(response.data.status == 1)
+                    {
+                        setTimeout(function () {
+                            window.location.reload()
+                        },1500)
+                    }
+                })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+            }).catch(swal.noop)
+        });
+
+        //新建版本
+        $('.new_version').click(function(){
+
+            swal({
+                title: '{:lang("New Version")}',
+                html: '<div class="form-group">' +
+                '<input id="input-field" type="text" class="form-control text-center" name="version_name" value=""/>' +
+                '</div>',
+                showCancelButton: true,
+                confirmButtonClass: 'btn btn-success',
+                cancelButtonClass: 'btn btn-danger',
+                buttonsStyling: false
+            }).then(function(result) {
+                axios.post('/index/project/add_version', {
+                    version_name:$('#input-field').val(),
+                    project_id:'{$project.id}'
+                }).then(function (response) {
+
+                    swal({
+                        type: 1 == response.data.status  ?'success':'error',
+                        html: response.data.message,
+                        confirmButtonClass: 'btn btn-success',
+                        buttonsStyling: false
+
+                    })
+
+                    if(response.data.status == 1)
+                    {
+                        setTimeout(function () {
+                            window.location.reload()
+                        },1500)
+                    }
+                })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+            }).catch(swal.noop)
+        });
     });
 </script>
 {/block}

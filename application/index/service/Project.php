@@ -32,7 +32,7 @@ class Project
                 return ServiceResult::Error($validate->getError());
             }
 
-            $model->allowField(['project_name','user_id','create_ip']);
+
             $add = $model->save([
                 'project_name'=>$project_name,
                 'user_id'=>$user_id,
@@ -43,8 +43,10 @@ class Project
             $v = new ProjectVersion();
             $m->project_id = $model->id;
             $v->project_id = $model->id;
-            $m->module_name = '默认';
-            $v->version_name = '默认';
+            $m->user_id = $user_id;
+            $v->user_id = $user_id;
+            $m->module_name = lang('Default');
+            $v->version_name = lang('Default');
             $m->save();
             $v->save();
 

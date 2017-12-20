@@ -12,12 +12,12 @@ namespace app\index\validate;
 class ProjectVersion extends BaseValidate
 {
     protected $rule = [
-        'version_name'  =>  'unique:project_version|require|max:64|min:1',
+        'version_name'  =>  'require|max:64|min:1',
 
     ];
 
     protected $message = [
-        'version_name.unique' => '版本名称已存在',
+
         'version_name.require'=>'版本名称不为空',
         'version_name.max'  =>  '版本名称不能超过64位',
         'version_name.min' => '版本名称不为空',
