@@ -11,5 +11,6 @@ namespace app\index\model;
 
 class Bug extends BaseModel
 {
+    protected $autoWriteTimestamp = 'datetime';
 
 }

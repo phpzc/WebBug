@@ -8,6 +8,7 @@
 
 namespace app\index\service;
 
+use app\index\model\Bug as BugModel;
 
 class Bug
 {
@@ -16,4 +17,43 @@ class Bug
     {
 
     }
+
+    /**
+     * 分配给用户的Bug
+     * @param $user_id
+     * @param $project_id
+     */
+    public static function getProjectBugWithStatus($user_id,$project_id)
+    {
+
+        $data = BugModel::all(['current_user_id'=>$user_id,'project_id'=>$project_id,]);
+
+        return $data;
+    }
+
+    /**
+     * 用户创建的Bug
+     * @param $user_id
+     * @param $project_id
+
+     */
+    public static function getUserProjectBugWithStatus($user_id,$project_id)
+    {
+
+        $data = BugModel::all(['create_user_id'=>$user_id,'project_id'=>$project_id]);
+
+        return $data;
+    }
+
+    /**
+     * 项目的所有的Bug
+     * @param $project_id
+     * @param $status
+     */
+    public static function getAllProjectBugWithStatus($project_id)
+    {
+        $data = BugModel::all(['project_id'=>$project_id]);
+        return $data;
+    }
+
 }

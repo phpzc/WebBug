@@ -15,7 +15,6 @@ return [
     'Password'=>'密码',
     'Code'=>'验证码',
     'My Profile'=>'我的简历',
-    'Edit Profile'=>'修改简历',
     'Settings'=>'设置',
     'Project List'=>'项目列表',
     'Bug List'=>'Bug列表',
@@ -34,4 +33,7 @@ return [
     'New Module'=>'新建模块',
     'New Version'=>'新建版本',
     'Default'=>'默认',
+    'AllocateToMyBug'=>'分配给我的Bug',
+    'Created Bug'=>'我创建的Bug',
+    'All Bug'=>'所有Bug',
 ];

@@ -1,4 +1,174 @@
 {extend name="extend/main" /}
 {block name="content"}
+<div class="container-fluid">
 
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header card-header-icon" data-background-color="green">
+                    <i class="material-icons">home</i>
+                </div>
+                <div class="card-content">
+                    <h4 class="card-title">项目信息
+                        <button class="pull-right btn  btn-round btn-primary">
+                            <i class="material-icons">add</i>提交Bug</button>
+                    </h4>
+
+
+                    <div class="row">
+                        <hr>
+                        <!-- 当前项目 -->
+                        <div class="col-md-3">
+                            <select class="selectpicker" data-style="btn btn-primary btn-round" title="Single Select" data-size="<?php echo count($all_projects);?>" id="project_select">
+                                {volist name="all_projects" id="project"}
+                                <option value="{$project.id}" <?php if($project['id'] == $_GET['id']){ echo "selected";}?> >{$project.project_name}</option>
+                                {/volist}
+                            </select>
+                        </div>
+                        <div class="col-md-9">
+
+                            <a class="btn btn-info btn-round  pull-right" href="/project/main?id={$_GET['id']}&type=2">
+                                <i class="material-icons">bug_report</i> 所有Bug
+                            </a>
+
+
+                            <a class="btn btn-warning btn-round pull-right" href="/project/main?id={$_GET['id']}&type=1">
+                                <i class="material-icons">bug_report</i> 我创建的Bug
+                            </a>
+
+
+                            <a class="btn btn-danger btn-round pull-right" href="/project/main?id={$_GET['id']}&type=0">
+                                <i class="material-icons">bug_report</i> 分配给我的Bug
+                            </a>
+
+
+                            <a class="btn btn-primary btn-round pull-right" href="/project/main?id={$_GET['id']}">
+                                <i class="material-icons">home</i> home
+                            </a>
+
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-12 col-md-12">
+            <div class="card">
+                <div class="card-header card-header-tabs" data-background-color="rose">
+                    <div class="nav-tabs-navigation">
+                        <div class="nav-tabs-wrapper">
+                            <span class="nav-tabs-title">Tasks:</span>
+                            <ul class="nav nav-tabs" data-tabs="tabs">
+                                <li class="active">
+                                    <a href="#status0" data-toggle="tab">
+                                        <i class="material-icons">bug_report</i> 未修复
+                                        <div class="ripple-container"></div>
+                                    </a>
+                                </li>
+                                <li class="">
+                                    <a href="#status1" data-toggle="tab">
+                                        <i class="material-icons " >bug_report</i> 待审核
+                                        <div class="ripple-container"></div>
+                                    </a>
+                                </li>
+                                <li class="">
+                                    <a href="#status2" data-toggle="tab">
+                                        <i class="material-icons">bug_report</i> 已解决
+                                        <div class="ripple-container"></div>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-content">
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="status0">
+                            <table class="table">
+                                <tbody>
+                                {volist name="data" id="item"}
+                                <?php if($item['bug_status'] == 0){?>
+                                <tr>
+                                    <td>
+                                        {$item.id}
+                                    </td>
+                                    <td>{$item.bug_title}</td>
+                                    <td class="td-actions text-right">
+                                        <button type="button" rel="tooltip" title="Edit Task" class="btn btn-primary btn-simple btn-xs">
+                                            <i class="material-icons">edit</i>
+                                        </button>
+
+                                    </td>
+                                </tr>
+                                <?php } ?>
+                                {/volist}
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="tab-pane" id="status1">
+                            <table class="table">
+                                <tbody>
+                                {volist name="data" id="item"}
+                                <?php if($item['bug_status'] == 1){?>
+                                <tr>
+                                    <td>
+                                        {$item.id}
+                                    </td>
+                                    <td>{$item.bug_title}</td>
+                                    <td class="td-actions text-right">
+                                        <button type="button" rel="tooltip" title="Edit Task" class="btn btn-primary btn-simple btn-xs">
+                                            <i class="material-icons">edit</i>
+                                        </button>
+
+                                    </td>
+                                </tr>
+                                <?php } ?>
+                                {/volist}
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="tab-pane" id="status2">
+                            <table class="table">
+                                <tbody>
+                                {volist name="data" id="item"}
+                                <?php if($item['bug_status'] == 2){?>
+                                <tr>
+                                    <td>
+                                        {$item.id}
+                                    </td>
+                                    <td>{$item.bug_title}</td>
+                                    <td class="td-actions text-right">
+                                        <button type="button" rel="tooltip" title="Edit Task" class="btn btn-primary btn-simple btn-xs">
+                                            <i class="material-icons">edit</i>
+                                        </button>
+
+                                    </td>
+                                </tr>
+                                <?php } ?>
+                                {/volist}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+{/block}
+{block name="footer"}
+<script>
+    $(function () {
+       $('#project_select').change(function(){
+
+          window.location.href = '/project/main?id='+$('#project_select').val();
+       });
+    });
+</script>
 {/block}

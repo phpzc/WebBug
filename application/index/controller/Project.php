@@ -17,7 +17,7 @@ use app\index\model\ProjectVersion as ProjectVersionModel;
 
 use app\index\service\ProjectModule as ProjectModuleService;
 use app\index\service\ProjectVersion as ProjectVersionService;
-
+use app\index\service\Bug as BugService;
 
 class Project extends Auth
 {
@@ -77,9 +77,26 @@ class Project extends Auth
      */
     public function main()
     {
-        //todo BUG列表 BUG统计 项目版本 模块
+
+        $id = $this->request->param('id');
+        $type = $this->request->param('type',0);
+        $current_project = ProjectModel::get($id);
+        if($type == 0)
+        {
+            $data = BugService::getProjectBugWithStatus($this->user_id,$id);
+            $this->assign('title',$current_project['project_name'].'|'.lang('AllocateToMyBug'));
+        }else if($type == 1){
+            $data = BugService::getUserProjectBugWithStatus($this->user_id,$id);
+            $this->assign('title',$current_project['project_name'].'|'.lang('Created Bug'));
+        }else{
+            $data = BugService::getAllProjectBugWithStatus($id);
+            $this->assign('title',$current_project['project_name'].'|'.lang('All Bug'));
+        }
 
 
+        $this->assign('data',$data);
+        $this->assign('current_project',$current_project);
+        $this->assign('all_projects',ProjectModel::all(['user_id'=>$this->user_id]));
         $this->assign('menu_nav','project/index');
         return view('project/main');
     }
