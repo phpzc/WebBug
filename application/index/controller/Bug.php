@@ -15,6 +15,7 @@ use app\index\model\ProjectUser as ProjectUserModel;
 
 class Bug extends Auth
 {
+
     public function index()
     {
         $priority_status = $this->request->param('priority_status');

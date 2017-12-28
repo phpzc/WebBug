@@ -10,7 +10,9 @@ namespace app\index\service;
 
 use app\index\model\Project as ProjectModel;
 use app\index\model\ProjectModule;
+use app\index\model\ProjectUser;
 use app\index\model\ProjectVersion;
+use app\index\model\User;
 use app\index\validate\Project as ProjectValidate;
 use think\facade\Request;
 
@@ -41,14 +43,20 @@ class Project
 
             $m = new ProjectModule();
             $v = new ProjectVersion();
+            $u = new ProjectUser();
             $m->project_id = $model->id;
             $v->project_id = $model->id;
+            $u->project_id = $model->id;
+
             $m->user_id = $user_id;
             $v->user_id = $user_id;
+            $u->user_id = $user_id;
+
             $m->module_name = lang('Default');
             $v->version_name = lang('Default');
             $m->save();
             $v->save();
+            $u->save();
 
 
             $model->commit();
@@ -148,5 +156,127 @@ class Project
         }else{
             return ServiceResult::Error('删除失败');
         }
+    }
+
+    /**
+     * 查询出 可添加项目的 用户数据
+     * @param $project_id
+     *
+     * @return ServiceResult
+     */
+    public static function findCanAddUser($project_id)
+    {
+
+        $project = ProjectModel::get($project_id);
+
+        if(!$project)
+        {
+            return ServiceResult::Error('项目不存在');
+        }
+
+        $projectUserResult = ProjectUser::all(['project_id'=>$project_id]);
+
+        $userIds = [];
+
+        foreach ($projectUserResult as $v)
+        {
+            $userIds[]=$v['user_id'];
+        }
+
+        $allUser = User::all();
+
+        $userData = [];
+
+        foreach ($allUser as $k=>$v)
+        {
+            if(in_array($v['id'],$userIds)){
+                continue;
+            }
+
+            $userData[] = $v;
+
+        }
+
+        if(!empty($userData)){
+            return ServiceResult::Success($userData,'获取用户成功');
+        }else{
+            return ServiceResult::Error('获取用户失败');
+        }
+
+
+
+    }
+
+
+    /**
+     * 添加用户到项目人员中
+     * @param $userIdsArray
+     * @param $project_id
+     *
+     * @return ServiceResult
+     */
+    public static function addProjectUser($userIdsArray,$project_id)
+    {
+        $projectUserResult = ProjectUser::all(['project_id'=>$project_id]);
+
+        $userIds = [];
+
+        foreach ($projectUserResult as $v)
+        {
+            $userIds[]=$v['user_id'];
+        }
+
+
+        foreach ($userIdsArray as $k=>$v)
+        {
+            if(in_array(strval($v),$userIds)){
+                unset($userIdsArray[$k]);
+            }
+        }
+
+        if(empty($userIdsArray))
+        {
+            return ServiceResult::Error('没有可添加的用户');
+        }
+
+        $addData = [];
+
+        foreach ($userIdsArray as $v)
+        {
+            $addData[] = [
+                'user_id'=>$v,
+                'project_id'=>$project_id,
+            ];
+        }
+
+        $model = new ProjectUser();
+
+        $model->saveAll($addData);
+
+
+
+        return ServiceResult::Success([],'成功添加用户');
+    }
+
+
+    /**
+     * 删除项目人员
+     * @param $user_id
+     * @param $project_id
+     * @return ServiceResult
+     */
+    public static function deleteProjectUser($user_id,$project_id)
+    {
+        $project = ProjectModel::get($project_id);
+
+        if($project['user_id'] == $user_id)
+        {
+            return ServiceResult::Error('创建者不能删除');
+        }
+
+        ProjectUser::where(['project_id'=>$project_id,'user_id'=>$user_id])->delete();
+
+
+        return ServiceResult::Success([],'删除成功');
     }
 }

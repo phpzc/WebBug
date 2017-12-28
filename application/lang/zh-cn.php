@@ -37,4 +37,9 @@ return [
     'Created Bug'=>'我创建的Bug',
     'All Bug'=>'所有Bug',
     'New Bug'=>'新建Bug',
+    'Project Users'=>'项目人员',
+    'New User'=>'添加人员',
+    'Owner'=>'拥有者',
+    'Delete Project User'=>'删除项目人员',
+
 ];

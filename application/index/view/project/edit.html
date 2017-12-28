@@ -38,9 +38,9 @@
         </div>
 
 
-        <!-- module and version -->
+        <!-- module and version 项目人员 -->
         <div class="col-md-12">
-            <div class="col-md-6">
+            <div class="col-md-4">
                 <div class="card">
                     <div class="card-header card-header-icon" data-background-color="rose">
                         <i class="material-icons">assignment</i>
@@ -88,7 +88,7 @@
                 </div>
             </div>
 
-            <div class="col-md-6">
+            <div class="col-md-4">
                 <div class="card">
                     <div class="card-header card-header-icon" data-background-color="rose">
                         <i class="material-icons">assignment</i>
@@ -135,7 +135,61 @@
                     </div>
                 </div>
             </div>
+
+
+            <!-- 项目人员 -->
+            <div class="col-md-4">
+
+                <div class="card">
+                    <div class="card-header card-header-icon" data-background-color="rose">
+                        <i class="material-icons">assignment</i>
+                    </div>
+                    <div class="card-content">
+                        <h4 class="card-title">{:lang('Project Users')}</h4>
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead>
+                                <tr>
+                                    <th class="text-center">User Id</th>
+                                    <th>Name</th>
+
+
+                                    <th class="text-right">Actions</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {volist name="project_user" id="item"}
+
+                                <tr>
+                                    <td class="text-center">{$item.user_id}</td>
+                                    <td>{$item->user->username}</td>
+
+                                    <td class="td-actions text-right">
+
+                                        <?php if($item['user_id'] != $project['user_id']){ ?>
+                                        <button type="button" rel="tooltip" class="btn btn-danger del_project_user" data-id="{$item.user_id}" title="删除">
+                                            <i class="material-icons">close</i>
+                                        </button>
+                                        <?php }else{ ?>
+                                        {:lang('Owner')}
+                                        <?php } ?>
+                                    </td>
+                                </tr>
+                                {/volist}
+
+                                <tr><td></td><td></td><td><button type="button" rel="tooltip" class="btn btn-success pull-right new_user">
+                                    <i class="material-icons">add</i>
+                                    {:lang('New User')}
+                                </button></td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
+
+
 
     </div>
 </div>
@@ -343,6 +397,50 @@
         });
 
 
+        //删除项目人员
+        $('.del_project_user').click(function(){
+            var id = $(this).data('id');
+
+            var target = $(this).parent().parent();
+
+            swal({
+                title: '{:lang("Delete Project User")}',
+                text: 'Are you sure delete it?',
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonClass: 'btn btn-success',
+                cancelButtonClass: 'btn btn-danger',
+                confirmButtonText: 'Yes, delete it!',
+                cancelButtonText: 'No, keep it',
+                buttonsStyling: false
+            }).then(function(result) {
+                axios.post('/index/project/delete_project_user', {
+
+                    user_id:id,
+                    project_id:'{$_GET["id"]}'
+                }).then(function (response) {
+
+                    swal({
+                        type: 1 == response.data.status  ?'success':'error',
+                        html: response.data.message,
+                        confirmButtonClass: 'btn btn-success',
+                        buttonsStyling: false
+
+                    })
+
+                    if(response.data.status == 1)
+                    {
+                        target.hide();
+                    }
+                })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+            }).catch(swal.noop)
+        });
+
+
+
         //新建模块
         $('.new_module').click(function(){
 
@@ -420,6 +518,76 @@
                     });
             }).catch(swal.noop)
         });
+
+
+        //添加新人员
+        $('.new_user').click(function(){
+
+            axios.post('/index/project/find_project_can_add_user', {
+                id:'{$project.id}'
+            }).then(function(response){
+
+                var str='';
+
+                if(1 == response.data.status)
+                {
+                    for(var i =0;i<response.data.data.length;i++)
+                    {
+                        str += '<label style="margin: 5px;"><input type="checkbox" name="user_id[]" checked value="'+response.data.data[i].id+'">'+response.data.data[i].username+'</label>';
+                    }
+                }
+
+
+                swal({
+                    title: '{:lang("New User")}',
+                    html: '<div class="form-group"><label class="col-sm-2 label-on-left">请选择用户</label><div class="col-sm-10 text-left"><div class="checkbox checkbox-inline">' +
+                    str +
+                    '</div></div></div>',
+                    showCancelButton: true,
+                    confirmButtonClass: 'btn btn-success',
+                    cancelButtonClass: 'btn btn-danger',
+                    buttonsStyling: false
+                }).then(function(result) {
+
+                    var value =[];
+                    $('input[name="user_id[]"]:checked').each(function(){
+                        value.push($(this).val());
+                    });
+
+                    axios.post('/index/project/add_project_user', {
+                        "user_ids":value,
+                        project_id:'{$project.id}'
+                    }).then(function (response) {
+
+                        swal({
+                            type: 1 == response.data.status  ?'success':'error',
+                            html: response.data.message,
+                            confirmButtonClass: 'btn btn-success',
+                            buttonsStyling: false
+
+                        })
+
+                        if(response.data.status == 1)
+                        {
+                            setTimeout(function () {
+                                window.location.reload()
+                            },1500)
+                        }
+                    }).catch(function (error) {
+                            console.log(error);
+                    });
+
+                }).catch(swal.noop)
+
+
+            }).catch(function (error) {
+                console.log(error);
+            })
+
+        });
+
+
+
     });
 </script>
 {/block}
