@@ -36,4 +36,5 @@ return [
     'AllocateToMyBug'=>'分配给我的Bug',
     'Created Bug'=>'我创建的Bug',
     'All Bug'=>'所有Bug',
+    'New Bug'=>'新建Bug',
 ];

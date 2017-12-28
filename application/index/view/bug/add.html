@@ -1,0 +1,136 @@
+{extend name="extend/main" /}
+{block name="content"}
+<div class="container-fluid">
+    <div class="col-md-12">
+        <div class="card">
+            <form id="TypeValidation" class="form-horizontal" action="" method="">
+                <div class="card-header card-header-text" data-background-color="rose">
+                    <h4 class="card-title">{:lang('New Bug')}</h4>
+                </div>
+                <div class="card-content">
+                    <div class="row">
+                        <label class="col-sm-2 label-on-left">Bug标题</label>
+                        <div class="col-sm-7">
+                            <div class="form-group label-floating">
+                                <label class="control-label"></label>
+                                <input class="form-control" type="text" name="bug_title" required="true" />
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <label class="col-sm-2 label-on-left">版本</label>
+                        <div class="col-sm-7">
+                            <div class="form-group label-floating col-md-6">
+                                <label class="control-label"></label>
+                                <select class="selectpicker" data-style="btn btn-primary btn-round" data-size="<?php echo count($version);?>" id="version_select" name="version_id">
+                                {volist name="version" id="item"}
+                                    <option value="{$item.id}">{$item.version_name}</option>
+                                {/volist}
+                                </select>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <label class="col-sm-2 label-on-left">模块</label>
+                        <div class="col-sm-7">
+                            <div class="form-group label-floating col-md-6">
+                                <label class="control-label"></label>
+                                <select class="selectpicker" data-style="btn btn-warning btn-round" data-size="<?php echo count($module);?>" id="module_select" name="module_id">
+                                    {volist name="module" id="item"}
+                                    <option value="{$item.id}">{$item.module_name}</option>
+                                    {/volist}
+                                </select>
+
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <label class="col-sm-2 label-on-left">优先级</label>
+                        <div class="col-sm-7">
+                            <div class="form-group label-floating col-md-6">
+                                <label class="control-label"></label>
+                                <select class="selectpicker" data-style="btn btn-info btn-round" data-size="3" id="level_select" name="priority_status">
+                                    <option value="0">低</option>
+                                    <option value="1">中</option>
+                                    <option value="2">高</option>
+                                </select>
+
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <label class="col-sm-2 label-on-left">处理人</label>
+                        <div class="col-sm-7">
+                            <div class="form-group label-floating col-md-6">
+                                <label class="control-label"></label>
+
+                                <select name="current_user_id" class="selectpicker" data-style="btn btn-danger btn-round" data-size="{:count($project_user)}">
+
+                                    {volist name="project_user" id="item"}
+                                        <option value="{$item.user_id}">{$item->user->username}</option>
+                                    {/volist}
+                                </select>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="row">
+                        <label class="col-sm-2 label-on-left">描述</label>
+                        <div class="col-sm-7">
+                            <div class="form-group label-floating">
+                                <label class="control-label"></label>
+                                <textarea name="bug_content" class="form-control "  cols="100" rows="10" id="bug_content"></textarea>
+                                
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="card-footer text-center">
+                    <input type="button" class="btn btn-rose btn-fill" value="{:lang('Submit')}" id="add_bug_btn">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{/block}
+{block name="footer"}
+<script>
+    $(function () {
+       $('#add_bug_btn').click(function(){
+           axios.post('/index/bug/add', {
+               bug_title:$('input[name=bug_title]').val(),
+               bug_content:$('#bug_content').val(),
+               id:'{$_GET["id"]}',
+               current_user_id:$('select[name=current_user_id]').val(),
+               bug_status:0,
+               priority_status:$('select[name=priority_status]').val(),
+               version_id:$('select[name=version_id]').val(),
+               module_id:$('select[name=module_id]').val()
+           }).then(function (response) {
+               swal({
+                   title: "提示!",
+                   text: response.data.message,
+                   timer: 2000,
+                   showConfirmButton: false
+               }).catch(swal.noop)
+
+               if(response.data.status == 1)
+               {
+                   setTimeout(function(){
+                       location.href = '/project/main?id={$_GET["id"]}';
+                   },2100);
+               }
+           })
+               .catch(function (error) {
+                   console.log(error);
+               });
+       });
+    });
+</script>
+{/block}
