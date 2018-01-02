@@ -13,4 +13,30 @@ class Bug extends BaseModel
 {
     protected $autoWriteTimestamp = 'datetime';
 
+
+    public function project()
+    {
+        return $this->hasOne('Project','id','project_id');
+    }
+
+    public function version()
+    {
+        return $this->hasOne('ProjectVersion','id','version_id');
+    }
+
+    public function module()
+    {
+        return $this->hasOne('ProjectModule','id','module_id');
+    }
+
+
+    public function createuser()
+    {
+        return $this->hasOne('User','id','create_user_id');
+    }
+
+    public function currentuser()
+    {
+        return $this->hasOne('User','id','current_user_id');
+    }
 }

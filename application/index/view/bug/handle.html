@@ -1,0 +1,295 @@
+{extend name="extend/main" /}
+{block name="content"}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <form method="get" action="" class="form-horizontal">
+                    <div class="card-header card-header-text" data-background-color="rose">
+                        <h4 class="card-title">{:lang('Handle Bug')}</h4>
+                    </div>
+                    <div class="card-content">
+                        <div class="row">
+                            <label class="col-sm-2 label-on-left">项目名称 </label>
+                            <div class="col-sm-10">
+                                <div class="form-group label-floating is-empty">
+                                    <label class="control-label"></label>
+                                    <input type="text" class="form-control" value="{$bug->project->project_name}" readonly>
+                                    <span class="help-block"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <label class="col-sm-2 label-on-left"> Bug标题</label>
+                            <div class="col-sm-10">
+                                <div class="form-group label-floating is-empty">
+                                    <label class="control-label"></label>
+                                    <input type="text" class="form-control" value="{$bug.bug_title}" readonly>
+                                    <span class="help-block"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <label class="col-sm-2 label-on-left">时间 </label>
+                            <div class="col-sm-10">
+                                <div class="form-group label-floating is-empty">
+                                    <label class="control-label"></label>
+                                    <input type="text" class="form-control" value="{$bug.create_time}" readonly>
+                                    <span class="help-block"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <label class="col-sm-2 label-on-left"> 模块</label>
+                            <div class="col-sm-10">
+                                <div class="form-group label-floating is-empty">
+                                    <label class="control-label"></label>
+                                    <input type="text" class="form-control" value="{$bug->module->module_name}" readonly>
+                                    <span class="help-block"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <label class="col-sm-2 label-on-left"> 版本</label>
+                            <div class="col-sm-10">
+                                <div class="form-group label-floating is-empty">
+                                    <label class="control-label"></label>
+                                    <input type="text" class="form-control" value="{$bug->version->version_name}" readonly>
+                                    <span class="help-block"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <label class="col-sm-2 label-on-left"> 优先级</label>
+                            <div class="col-sm-10">
+                                <div class="form-group label-floating is-empty">
+                                    <label class="control-label"></label>
+                                    <input type="text" class="form-control" value="<?php if($bug['priority_status'] == 0){ echo '低';}elseif($bug['priority_status'] == 1){echo '中';}else{ echo '高';}?>" readonly>
+                                    <span class="help-block"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <label class="col-sm-2 label-on-left">状态 </label>
+                            <div class="col-sm-10">
+                                <div class="form-group label-floating is-empty">
+                                    <label class="control-label"></label>
+                                    <input type="text" class="form-control" value="<?php if($bug['bug_status'] == 0){ echo '未处理';}elseif($bug['bug_status'] == 1){echo '待审核';}else{ echo '已解决';}?>" readonly>
+                                    <span class="help-block"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <label class="col-sm-2 label-on-left"> 分配人</label>
+                            <div class="col-sm-10">
+                                <div class="form-group label-floating is-empty">
+                                    <label class="control-label"></label>
+                                    <input type="text" class="form-control" value="{$bug->createuser->username}" readonly>
+                                    <span class="help-block"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <label class="col-sm-2 label-on-left"> 处理人</label>
+                            <div class="col-sm-10">
+                                <div class="form-group label-floating is-empty">
+                                    <label class="control-label"></label>
+                                    <input type="text" class="form-control" value="{$bug->currentuser->username}" readonly>
+                                    <span class="help-block"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <label class="col-sm-2 label-on-left">描述 </label>
+                            <div class="col-sm-10">
+                                <div class="form-group label-floating is-empty">
+                                    <label class="control-label"></label>
+                                    {$bug.bug_content}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <label class="col-sm-2 label-on-left"> 处理过程</label>
+                            <div class="col-sm-10">
+                                <div class="card-content table-full-width">
+
+                                    <table class="table table-hover table-responsive">
+                                        <thead class="text-primary"><th>状态</th><th>处理人</th><th>内容</th><th>时间</th>
+                                        </thead>
+
+                                        <tr >
+                                            <td>创建</td>
+                                            <td>{$bug->createuser->username}</td>                                                  <td>123</td>
+                                            <td>{$bug->create_time}</td>
+                                        </tr>
+
+
+                                        {volist name="bug_log" id="log"}
+                                        <tr>
+                                            <td>{$log->old_bug_status} -> {$log->new_bug_status}</td>
+                                            <td> <a class="btn  btn-icon btn-info">{$log->olduser->username} <i class="material-icons">trending_flat</i> {$log->newuser->username} </a> </td>
+                                            <td>{$log->content}</td>
+                                            <td>{$log->create_time}</td>
+                                        </tr>
+                                        {/volist}
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                        <?php if($bug['bug_status'] == 0 ){ ?>
+
+                        <div class="row">
+                            <label class="col-sm-2 label-on-left"> 状态</label>
+                            <div class="col-sm-10  checkbox-radios">
+                                <div class="radio">
+                                    <label>
+                                        <input type="radio" name="optionsRadios" checked="true" value="1" id="user_radio_1"> 已解决,去提交审核
+                                    </label>
+                                </div>
+
+
+                                <div class="radio">
+                                    <label>
+                                        <input type="radio" name="optionsRadios" value="2" id="user_radio"> 转发给其他人
+                                    </label>
+                                </div>
+                                
+                                <div class="">
+                                    <div class="row">
+
+                                        <select class="form-control hide"  id="to_other_user" >
+
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <label class="col-sm-2 label-on-left">备注 </label>
+                            <div class="col-sm-10">
+                                <div class="form-group label-floating is-empty">
+                                    <label class="control-label"></label>
+                                    <input type="text" class="form-control" name="content">
+                                    <span class="help-block"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <label class="col-sm-2 label-on-left"> </label>
+                            <div class="col-sm-10">
+                                <div class="form-group label-floating is-empty">
+                                    <label class="control-label"></label>
+                                    <input type="button" class="btn btn-success" value="{:lang('Submit')}" id="add_bug_log">
+                                    <span class="help-block"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <?php } ?>
+
+
+
+
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{/block}
+{block name="footer"}
+<script>
+    $(function(){
+        var isRequest = false;
+
+        $('#user_radio_1').click(function () {
+            $('#to_other_user').hide();
+        });
+
+        $('#user_radio').click(function(){
+
+            $('#to_other_user').removeClass('hide');
+
+            $('#to_other_user').show();
+
+            if(isRequest)
+            {
+
+            }else{
+
+                axios.post('/index/bug/project_users', {
+                    id:'{$bug.project_id}'
+                }).then(function (response) {
+                    //拼接select
+                    if(response.data.status == 1)
+                    {
+                        isRequest = true;
+
+                        for(var i =0;i<response.data.data.length;i++)
+                        {
+                            $('#to_other_user').append('<option value='+response.data.data[i].user_id+'>'+response.data.data[i].username+'</option>');
+                        }
+
+                        $('#to_other_user').show();
+
+                    }else{
+                        $('#to_other_user').show();
+                    }
+
+                }).catch(function (error) {
+                    console.log(error);
+                });
+
+                $('#to_other_user').show();
+            }
+        })
+
+        $('#add_bug_log').click(function(){
+
+
+            var current_user_id = '{$bug.current_user_id}';
+            var status = 0;
+            if($('#user_radio').is(':checked'))
+            {
+                current_user_id = $('#to_other_user').val();
+            }else{
+                // 待审核状态 处理完成
+                status = 1;
+            }
+
+
+            axios.post('/index/bug/handle', {
+                content:$('input[name=content]').val(),
+                bug_id:'{$bug.id}',
+                current_user_id:current_user_id,
+                status:status
+            }).then(function (response) {
+
+                swal({
+                    title: "提示!",
+                    text: response.data.message,
+                    timer: 2000,
+                    showConfirmButton: false
+                }).catch(swal.noop)
+
+                if(response.data.status == 1)
+                {
+                    setTimeout(function(){
+                        window.location.reload();
+                    },2100);
+
+                }
+
+            }).catch(function (error) {
+                console.log(error);
+            });
+        });
+    });
+</script>
+{/block}

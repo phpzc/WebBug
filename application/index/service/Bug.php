@@ -118,4 +118,49 @@ class Bug
         }
     }
 
+
+    /**
+     * 处理BUG
+     *
+     * @param $bug_id   bug id
+     * @param $user_id  操作用户id
+     * @param $data     操作数据
+     */
+    public static function handle($bug_id,$user_id,$data)
+    {
+        $bug = BugModel::get($bug_id);
+        if(!$bug)
+        {
+            return ServiceResult::Error('Bug不存在');
+        }
+
+        $log = new BugLogModel();
+        $log->startTrans();
+        try{
+            $log->bug_id = $bug_id;
+            $log->content = $data['content'];
+            $log->old_user_id = $bug->current_user_id;
+            $log->new_user_id = $data['current_user_id'];
+            $log->old_bug_status = $bug->bug_status;
+            $log->new_bug_status = $data['status'];
+
+            if($bug->current_user_id != $data['current_user_id'])
+            {
+                $bug->save(['status'=>$data['status'],'current_user_id'=>$data['current_user_id']]);
+            }
+
+            $log->save();
+
+        }
+        catch (\Exception $e)
+        {
+            $log->rollback();
+            return ServiceResult::Error($e->getMessage());
+        }
+
+        $log->commit();
+
+        return ServiceResult::Success([],'提交成功');
+
+    }
 }

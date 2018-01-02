@@ -41,5 +41,6 @@ return [
     'New User'=>'添加人员',
     'Owner'=>'拥有者',
     'Delete Project User'=>'删除项目人员',
+    'Handle Bug'=>'处理Bug',
 
 ];
