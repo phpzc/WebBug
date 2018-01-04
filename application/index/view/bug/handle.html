@@ -106,7 +106,11 @@
                             <div class="col-sm-10">
                                 <div class="form-group label-floating is-empty">
                                     <label class="control-label"></label>
-                                    {$bug.bug_content}
+                                    <div class="row">
+
+
+                                    <?php echo html_entity_decode($bug['bug_content']);?>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -204,6 +208,7 @@
 </div>
 {/block}
 {block name="footer"}
+
 <script>
     $(function(){
         var isRequest = false;

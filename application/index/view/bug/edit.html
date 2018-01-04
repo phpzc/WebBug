@@ -1,4 +1,7 @@
 {extend name="extend/main" /}
+{block name="head"}
+
+{/block}
 {block name="content"}
 <div class="container-fluid">
     <div class="row">
@@ -24,7 +27,7 @@
                             <div class="col-sm-10">
                                 <div class="form-group label-floating is-empty">
                                     <label class="control-label"></label>
-                                    <input type="text" class="form-control" value="{$bug.bug_title}" >
+                                    <input type="text" class="form-control" value="{$bug.bug_title}" name="bug_title" >
                                     <span class="help-block"></span>
                                 </div>
                             </div>
@@ -100,12 +103,22 @@
                             <div class="col-sm-10">
                                 <div class="form-group label-floating is-empty">
                                     <label class="control-label"></label>
-                                    {$bug.bug_content}
+                                    <textarea name="bug_content" class="form-control "  cols="100" rows="10" id="bug_content">{$bug.bug_content}</textarea>
+
                                 </div>
                             </div>
                         </div>
 
-
+                        <div class="row">
+                            <label class="col-sm-2 label-on-left"> </label>
+                            <div class="col-sm-10">
+                                <div class="form-group label-floating is-empty">
+                                    <label class="control-label"></label>
+                                    <input type="button" class="btn btn-success" value="{:lang('Submit')}" id="edit_bug_log">
+                                    <span class="help-block"></span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </form>
             </div>
@@ -114,71 +127,32 @@
 </div>
 {/block}
 {block name="footer"}
+<script charset="utf-8" src="/static/kindeditor/kindeditor-all-min.js"></script>
+<script charset="utf-8" src="/static/kindeditor/lang/zh-CN.js"></script>
+<script>
+    KindEditor.ready(function(K) {
+        window.editor = K.create('#bug_content', {
+            filterMode : true,
+            width:'100%',
+            height:500
+        });
+    });
+</script>
 <script>
     $(function(){
-        var isRequest = false;
 
-        $('#user_radio_1').click(function () {
-            $('#to_other_user').hide();
-        });
+        $('#edit_bug_log').click(function(){
 
-        $('#user_radio').click(function(){
+            editor.sync();
 
-            $('#to_other_user').removeClass('hide');
-
-            $('#to_other_user').show();
-
-            if(isRequest)
-            {
-
-            }else{
-
-                axios.post('/index/bug/project_users', {
-                    id:'{$bug.project_id}'
-                }).then(function (response) {
-                    //拼接select
-                    if(response.data.status == 1)
-                    {
-                        isRequest = true;
-
-                        for(var i =0;i<response.data.data.length;i++)
-                        {
-                            $('#to_other_user').append('<option value='+response.data.data[i].user_id+'>'+response.data.data[i].username+'</option>');
-                        }
-
-                        $('#to_other_user').show();
-
-                    }else{
-                        $('#to_other_user').show();
-                    }
-
-                }).catch(function (error) {
-                    console.log(error);
-                });
-
-                $('#to_other_user').show();
-            }
-        })
-
-        $('#add_bug_log').click(function(){
-
-
-            var current_user_id = '{$bug.current_user_id}';
-            var status = 0;
-            if($('#user_radio').is(':checked'))
-            {
-                current_user_id = $('#to_other_user').val();
-            }else{
-                // 待审核状态 处理完成
-                status = 1;
-            }
-
-
-            axios.post('/index/bug/handle', {
-                content:$('input[name=content]').val(),
-                bug_id:'{$bug.id}',
-                current_user_id:current_user_id,
-                status:status
+            axios.post('/index/bug/edit', {
+                bug_content:document.getElementById('bug_content').value,
+                id:'{$bug.id}',
+                bug_status:$('select[name=bug_status]').val(),
+                priority_status:$('select[name=priority_status]').val(),
+                module_id:$('select[name=module_id]').val(),
+                version_id:$('select[name=version_id]').val(),
+                bug_title:$('input[name=bug_title]').val()
             }).then(function (response) {
 
                 swal({
@@ -188,13 +162,6 @@
                     showConfirmButton: false
                 }).catch(swal.noop)
 
-                if(response.data.status == 1)
-                {
-                    setTimeout(function(){
-                        window.location.reload();
-                    },2100);
-
-                }
 
             }).catch(function (error) {
                 console.log(error);

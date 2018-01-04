@@ -163,4 +163,55 @@ class Bug
         return ServiceResult::Success([],'提交成功');
 
     }
+
+    /**
+     * 修改bug内容
+     * @param $id
+     * @param $user_id
+     * @param $data
+     *
+     * @return ServiceResult
+     */
+    public static function edit($id,$user_id,$data)
+    {
+        $bug = BugModel::get($id);
+
+        if(!$bug)
+        {
+            return ServiceResult::Error('数据不存在');
+        }
+
+        $bug->startTrans();
+
+        try{
+            $saveData = [
+                'bug_content'=>$data['bug_content'],
+                'bug_status'=>$data['bug_status'],
+                'priority_status'=>$data['priority_status'],
+                'module_id'=>$data['module_id'],
+                'version_id'=>$data['version_id'],
+                'bug_title'=>$data['bug_title'],
+            ];
+
+            $save = $bug->save($saveData);
+
+        }catch (\Exception $e)
+        {
+            $bug->rollback();
+
+            return ServiceResult::Error($e->getMessage());
+        }
+
+        if($save !== false)
+        {
+            $bug->commit();
+
+            return ServiceResult::Success([],'修改成功');
+        }else{
+            $bug->rollback();
+
+            return ServiceResult::Error('修改失败');
+        }
+
+    }
 }

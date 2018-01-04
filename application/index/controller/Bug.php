@@ -137,6 +137,7 @@ class Bug extends Auth
             return view('bug/edit');
         }else{
 
+            return BugService::edit($this->request->param('id'),$this->user_id,$this->request->post());
         }
     }
 
