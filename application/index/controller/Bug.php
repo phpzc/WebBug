@@ -22,9 +22,14 @@ class Bug extends Auth
 
     public function index()
     {
-        $priority_status = $this->request->param('priority_status');
+
+        $priority_status = $this->request->param('priority_status',0,'intval');
+
+        $this->assign('bugs',BugModel::all(['priority_status'=>$priority_status,'current_user_id'=>$this->user_id]));
 
         $this->assign('title',lang('Bug List'));
+        $this->assign('menu_nav','bug/index');
+        $this->assign('priority_status',$priority_status + 1);
 
         return view('bug/index');
     }
@@ -116,6 +121,19 @@ class Bug extends Auth
     {
         if($this->request->isGet())
         {
+
+            $id = $this->request->param('id');
+
+            $bug = BugModel::get($id);
+            $this->assign('bug',$bug);
+            $this->assign('bug_log',BugLogModel::all(['bug_id'=>$id]));
+
+            $this->assign('module',ProjectModuleModel::all(['project_id'=>$bug->project_id]));
+            $this->assign('version',ProjectVersionModel::all(['project_id'=>$bug->project_id]));
+
+
+            $this->assign('title',lang('Edit Bug'));
+
             return view('bug/edit');
         }else{
 

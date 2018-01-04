@@ -24,6 +24,7 @@ Route::rule('project/index','index/project/index');
 Route::rule('project/main','index/project/main');
 Route::rule('profile','index/profile/index');
 Route::rule('logout','index/base/logout');
+Route::rule('bug/index','index/bug/index');
 return [
 
 ];

@@ -42,5 +42,7 @@ return [
     'Owner'=>'拥有者',
     'Delete Project User'=>'删除项目人员',
     'Handle Bug'=>'处理Bug',
+    'My Bug'=>'我的Bug',
+    'Edit Bug'=>'修改Bug',
 
 ];

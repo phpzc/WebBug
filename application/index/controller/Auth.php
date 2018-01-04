@@ -32,6 +32,7 @@ class Auth extends Base
 
 
         $this->assign('menu_nav','');
+        $this->assign('priority_status','');
     }
 
 }

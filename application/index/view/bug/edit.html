@@ -6,7 +6,7 @@
             <div class="card">
                 <form method="get" action="" class="form-horizontal">
                     <div class="card-header card-header-text" data-background-color="rose">
-                        <h4 class="card-title">{:lang('Handle Bug')}</h4>
+                        <h4 class="card-title">{:lang('Edit Bug')}</h4>
                     </div>
                     <div class="card-content">
                         <div class="row">
@@ -24,47 +24,54 @@
                             <div class="col-sm-10">
                                 <div class="form-group label-floating is-empty">
                                     <label class="control-label"></label>
-                                    <input type="text" class="form-control" value="{$bug.bug_title}" readonly>
+                                    <input type="text" class="form-control" value="{$bug.bug_title}" >
                                     <span class="help-block"></span>
                                 </div>
                             </div>
                         </div>
-                        <div class="row">
-                            <label class="col-sm-2 label-on-left">时间 </label>
-                            <div class="col-sm-10">
-                                <div class="form-group label-floating is-empty">
-                                    <label class="control-label"></label>
-                                    <input type="text" class="form-control" value="{$bug.create_time}" readonly>
-                                    <span class="help-block"></span>
-                                </div>
-                            </div>
-                        </div>
+
                         <div class="row">
                             <label class="col-sm-2 label-on-left"> 模块</label>
-                            <div class="col-sm-10">
+                            <div class="col-sm-4">
                                 <div class="form-group label-floating is-empty">
                                     <label class="control-label"></label>
-                                    <input type="text" class="form-control" value="{$bug->module->module_name}" readonly>
+                                    <select class="selectpicker" data-style="btn btn-primary btn-round" data-size="<?php echo count($module);?>" name="module_id">
+                                        {volist name="module" id="item"}
+
+                                        <option value="{$item.id}" <?php if($bug->module_id == $item['id']){ echo "selected";}?> >{$item.module_name}</option>
+                                        {/volist}
+                                    </select>
+
                                     <span class="help-block"></span>
                                 </div>
                             </div>
                         </div>
                         <div class="row">
                             <label class="col-sm-2 label-on-left"> 版本</label>
-                            <div class="col-sm-10">
+                            <div class="col-sm-4">
                                 <div class="form-group label-floating is-empty">
                                     <label class="control-label"></label>
-                                    <input type="text" class="form-control" value="{$bug->version->version_name}" readonly>
+                                    <select class="selectpicker" data-style="btn btn-warning btn-round" data-size="<?php echo count($version);?>" name="version_id">
+                                        {volist name="version" id="item"}
+
+                                        <option value="{$item.id}" <?php if($bug->version_id == $item['id']){ echo "selected";}?> >{$item.version_name}</option>
+                                        {/volist}
+                                    </select>
                                     <span class="help-block"></span>
                                 </div>
                             </div>
                         </div>
                         <div class="row">
                             <label class="col-sm-2 label-on-left"> 优先级</label>
-                            <div class="col-sm-10">
+                            <div class="col-sm-2">
                                 <div class="form-group label-floating is-empty">
                                     <label class="control-label"></label>
-                                    <input type="text" class="form-control" value="<?php if($bug['priority_status'] == 0){ echo '低';}elseif($bug['priority_status'] == 1){echo '中';}else{ echo '高';}?>" readonly>
+                                    <select class="selectpicker" data-style="btn btn-info btn-round" data-size="3" name="priority_status">
+                                        <option value="0" <?php if($bug->priority_status == 0 ){ echo "selected";} ?> >低</option>
+                                        <option value="1" <?php if($bug->priority_status == 1 ){ echo "selected";} ?>>中</option>
+                                        <option value="2" <?php if($bug->priority_status == 2 ){ echo "selected";} ?> >高</option>
+                                    </select>
+
                                     <span class="help-block"></span>
                                 </div>
                             </div>
@@ -72,35 +79,22 @@
 
                         <div class="row">
                             <label class="col-sm-2 label-on-left">状态 </label>
-                            <div class="col-sm-10">
+                            <div class="col-sm-4">
                                 <div class="form-group label-floating is-empty">
                                     <label class="control-label"></label>
-                                    <input type="text" class="form-control" value="<?php if($bug['bug_status'] == 0){ echo '未处理';}elseif($bug['bug_status'] == 1){echo '待审核';}else{ echo '已解决';}?>" readonly>
+
+                                    <select class="selectpicker" data-style="btn btn-info btn-round" data-size="3" name="bug_status">
+                                        <option value="0" <?php if($bug->bug_status == 0 ){ echo "selected";} ?> >未处理</option>
+                                        <option value="1" <?php if($bug->bug_status == 1 ){ echo "selected";} ?>>待审核</option>
+                                        <option value="2" <?php if($bug->bug_status == 2 ){ echo "selected";} ?> >已解决</option>
+                                    </select>
+
                                     <span class="help-block"></span>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="row">
-                            <label class="col-sm-2 label-on-left"> 分配人</label>
-                            <div class="col-sm-10">
-                                <div class="form-group label-floating is-empty">
-                                    <label class="control-label"></label>
-                                    <input type="text" class="form-control" value="{$bug->createuser->username}" readonly>
-                                    <span class="help-block"></span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <label class="col-sm-2 label-on-left"> 处理人</label>
-                            <div class="col-sm-10">
-                                <div class="form-group label-floating is-empty">
-                                    <label class="control-label"></label>
-                                    <input type="text" class="form-control" value="{$bug->currentuser->username}" readonly>
-                                    <span class="help-block"></span>
-                                </div>
-                            </div>
-                        </div>
+
                         <div class="row">
                             <label class="col-sm-2 label-on-left">描述 </label>
                             <div class="col-sm-10">
@@ -111,34 +105,6 @@
                             </div>
                         </div>
 
-                        <div class="row">
-                            <label class="col-sm-2 label-on-left"> 处理过程</label>
-                            <div class="col-sm-10">
-                                <div class="card-content table-full-width">
-
-                                    <table class="table table-hover table-responsive">
-                                        <thead class="text-primary"><th>状态</th><th>处理人</th><th>内容</th><th>时间</th>
-                                        </thead>
-
-                                        <tr >
-                                            <td>创建</td>
-                                            <td>{$bug->createuser->username}</td>                                                  <td>123</td>
-                                            <td>{$bug->create_time}</td>
-                                        </tr>
-
-
-                                        {volist name="bug_log" id="log"}
-                                        <tr>
-                                            <td>{$log->old_bug_status} -> {$log->new_bug_status}</td>
-                                            <td> <a class="btn  btn-icon btn-info">{$log->olduser->username} <i class="material-icons">trending_flat</i> {$log->newuser->username} </a> </td>
-                                            <td>{$log->content}</td>
-                                            <td>{$log->create_time}</td>
-                                        </tr>
-                                        {/volist}
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
 
                     </div>
                 </form>

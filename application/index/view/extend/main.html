@@ -18,8 +18,9 @@
     <link href="__CSS__/demo.css" rel="stylesheet" />
     <!--     Fonts and icons     -->
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700%7CMaterial+Icons" />
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!--<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700%7CMaterial+Icons" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">-->
+    <link href="/static/iconfont/material-icons.css" rel="stylesheet">
 </head>
 
 <body>
@@ -82,13 +83,13 @@
                 </li>
 
                 <li {eq name="menu_nav" value="project/index"}class="active"{/eq} >
-                    <a data-toggle="collapse" href="dashboard.html#componentsExamples">
+                    <a data-toggle="collapse" href="{:url()}#to_project">
                         <i class="material-icons">apps</i>
                         <p> 我的项目
                             <b class="caret"></b>
                         </p>
                     </a>
-                    <div class="collapse {eq name="menu_nav" value="project/index"}in{/eq}" id="componentsExamples">
+                    <div class="collapse {eq name="menu_nav" value="project/index"}in{/eq}" id="to_project" >
                         <ul class="nav">
                             <li {eq name="menu_nav" value="project/index"}class="active"{/eq} >
                                 <a href="/project/index">
@@ -101,29 +102,29 @@
                     </div>
                 </li>
 
-                <li>
-                    <a data-toggle="collapse" href="/dashboard.html#tablesExamples">
+                <li {eq name="menu_nav" value="bug/index"}class="active"{/eq}>
+                    <a data-toggle="collapse" href="{:url()}#to_my_bug">
                         <i class="material-icons">grid_on</i>
                         <p> 我的BUG
                             <b class="caret"></b>
                         </p>
                     </a>
-                    <div class="collapse" id="tablesExamples">
+                    <div class="collapse {eq name="menu_nav" value="bug/index"}in{/eq} "  id="to_my_bug">
                         <ul class="nav">
-                            <li>
-                                <a href="">
+                            <li {eq name="priority_status" value="3"}class="active"{/eq} >
+                                <a href="/bug/index?priority_status=2">
                                     <span class="sidebar-mini"> 高 </span>
                                     <span class="sidebar-normal"> 高优先级</span>
                                 </a>
                             </li>
-                            <li>
-                                <a href="">
+                            <li {eq name="priority_status" value="2"}class="active"{/eq}>
+                                <a href="/bug/index?priority_status=1">
                                     <span class="sidebar-mini"> 中 </span>
                                     <span class="sidebar-normal"> 中优先级 </span>
                                 </a>
                             </li>
-                            <li>
-                                <a href="">
+                            <li {eq name="priority_status" value="1"}class="active"{/eq}>
+                                <a href="/bug/index">
                                     <span class="sidebar-mini"> 低 </span>
                                     <span class="sidebar-normal"> 低优先级 </span>
                                 </a>
@@ -283,7 +284,7 @@
 <script src="__JS__/material.min.js" type="text/javascript"></script>
 <script src="__JS__/perfect-scrollbar.jquery.min.js" type="text/javascript"></script>
 <!-- Include a polyfill for ES6 Promises (optional) for IE11, UC Browser and Android browser support SweetAlert -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/core-js/2.4.1/core.js"></script>
+<script src="__JS__/core.js"></script>
 <!-- Library for adding dinamically elements -->
 <script src="__JS__/arrive.min.js" type="text/javascript"></script>
 <!-- Forms Validations Plugin -->
@@ -305,7 +306,7 @@
 <!-- Sliders Plugin, full documentation here: https://refreshless.com/nouislider/ -->
 <script src="__JS__/nouislider.min.js"></script>
 <!--  Google Maps Plugin    -->
-<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD1_8C5Xz9RpEeJSaJ3E_DeBv8i7j_p6Aw"></script>
+<!--<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD1_8C5Xz9RpEeJSaJ3E_DeBv8i7j_p6Aw"></script>-->
 <!--  Plugin for Select, full documentation here: http://silviomoreto.github.io/bootstrap-select -->
 <script src="__JS__/jquery.select-bootstrap.js"></script>
 <!--  DataTables.net Plugin, full documentation here: https://datatables.net/    -->

@@ -39,4 +39,11 @@ class Bug extends BaseModel
     {
         return $this->hasOne('User','id','current_user_id');
     }
+
+
+    public function getBugStatusWord()
+    {
+        $status = [0=>'待处理',1=>'待审核',2=>'已解决'];
+        return $status[$this->bug_status];
+    }
 }

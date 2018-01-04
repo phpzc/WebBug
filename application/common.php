@@ -48,3 +48,32 @@ EOT;
 
     }
 }
+
+/**
+ * 判断是否SSL协议
+ * @return boolean
+ */
+function is_ssl() {
+    if(isset($_SERVER['HTTPS']) && ('1' == $_SERVER['HTTPS'] || 'on' == strtolower($_SERVER['HTTPS']))){
+        return true;
+    }elseif(isset($_SERVER['SERVER_PORT']) && ('443' == $_SERVER['SERVER_PORT'] )) {
+        return true;
+    }
+    return false;
+}
+
+/**
+ * 生成网站地址
+ *
+ * @param string $requestUri 本站访问地址
+ *
+ * @return string
+ */
+function make_url($requestUri = '')
+{
+    if (empty($requestUri))
+        $requestUri = strval($_SERVER['REQUEST_URI']);
+
+    return (is_ssl() ? 'https://' : 'http://') . $_SERVER['HTTP_HOST'] . $requestUri;
+
+}
