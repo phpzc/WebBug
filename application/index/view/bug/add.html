@@ -81,7 +81,7 @@
 
                     <div class="row">
                         <label class="col-sm-2 label-on-left">描述</label>
-                        <div class="col-sm-7">
+                        <div class="col-sm-10">
                             <div class="form-group label-floating">
                                 <label class="control-label"></label>
                                 <textarea name="bug_content" class="form-control "  cols="100" rows="10" id="bug_content"></textarea>
@@ -100,9 +100,21 @@
 </div>
 {/block}
 {block name="footer"}
+<script charset="utf-8" src="/static/kindeditor/kindeditor-all-min.js"></script>
+<script charset="utf-8" src="/static/kindeditor/lang/zh-CN.js"></script>
+<script>
+    KindEditor.ready(function(K) {
+        window.editor = K.create('#bug_content', {
+            filterMode : true,
+            width:'100%',
+            height:500
+        });
+    });
+</script>
 <script>
     $(function () {
        $('#add_bug_btn').click(function(){
+           editor.sync();
            axios.post('/index/bug/add', {
                bug_title:$('input[name=bug_title]').val(),
                bug_content:$('#bug_content').val(),

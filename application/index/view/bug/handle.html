@@ -108,8 +108,8 @@
                                     <label class="control-label"></label>
                                     <div class="row">
 
+                                        <textarea name="bug_content" class="form-control "  cols="100" rows="10" id="bug_content">{$bug.bug_content}</textarea>
 
-                                    <?php echo html_entity_decode($bug['bug_content']);?>
                                     </div>
                                 </div>
                             </div>
@@ -208,7 +208,19 @@
 </div>
 {/block}
 {block name="footer"}
+<script charset="utf-8" src="/static/kindeditor/kindeditor-all-min.js"></script>
+<script charset="utf-8" src="/static/kindeditor/lang/zh-CN.js"></script>
+<script>
+    KindEditor.ready(function(K) {
+        window.editor = K.create('#bug_content', {
+            filterMode : true,
+            width:'100%',
+            height:500
+        });
 
+        editor.readonly(true);
+    });
+</script>
 <script>
     $(function(){
         var isRequest = false;
