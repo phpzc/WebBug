@@ -1,9 +1,9 @@
 <?php
 
 return [
-    'host' => 'smtp.qq.com',
-    'port' => '465',
+    'host' => env('EMAIL_HOST',''),
+    'port' => env('EMAIL_PORT',''),
     'is_ssl' => true,
-    'username' => '1091796360@qq.com',
-    'password' => 'gjvtjszssgvtiefh',
+    'username' => env('EMAIL_USER',''),
+    'password' => env('EMAIL_PWD',''),
 ];
