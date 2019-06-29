@@ -13,6 +13,7 @@ use think\captcha\Captcha;
 use Lang;
 use app\index\service\Auth as AuthService;
 
+
 class Base extends Error
 {
 
@@ -91,4 +92,6 @@ class Base extends Error
     {
         return $this->user_id > 0;
     }
+
+
 }

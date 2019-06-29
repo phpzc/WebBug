@@ -21,7 +21,8 @@ class Email
 
         try {
             //Server settings
-            $mail->SMTPDebug = 0;                                       // Enable verbose debug output
+            $mail->SMTPDebug = 0;
+            $mail->CharSet ="UTF-8";
             $mail->isSMTP();                                            // Set mailer to use SMTP
             $mail->Host       = config('email.host');  // Specify main and backup SMTP servers
             $mail->SMTPAuth   = true;                                   // Enable SMTP authentication

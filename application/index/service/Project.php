@@ -14,7 +14,10 @@ use app\index\model\ProjectUser;
 use app\index\model\ProjectVersion;
 use app\index\model\User;
 use app\index\validate\Project as ProjectValidate;
+use app\job\ProjectJob;
 use think\facade\Request;
+
+use think\Queue;
 
 class Project
 {
@@ -94,6 +97,7 @@ class Project
             return ServiceResult::Error('没有权限修改');
         }
 
+        $oldName = $project->project_name;
 
         $project->startTrans();
         try{
@@ -124,6 +128,8 @@ class Project
 
         if($update !== false)
         {
+
+            static::notifyUser(ProjectJob::class,$id, '修改项目名称','项目原名'.$oldName.'改为'.$project_name);
 
             return ServiceResult::Success([],'修改成功');
 
@@ -278,5 +284,20 @@ class Project
 
 
         return ServiceResult::Success([],'删除成功');
+    }
+
+
+
+
+    public static function notifyUser($jobClassName,$projectId,$title,$content)
+    {
+        $all = ProjectUser::all(['project_id'=>$projectId]);
+
+        $userIds = array_column($all->toArray(),'user_id');
+
+        $data =  make_job($userIds,$title,ProjectEmailTemplate::getEmail($content));
+
+
+        Queue::push($jobClassName,$data);
     }
 }

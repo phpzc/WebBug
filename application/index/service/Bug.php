@@ -10,7 +10,10 @@ namespace app\index\service;
 
 use app\index\model\Bug as BugModel;
 use app\index\model\BugLog as BugLogModel;
+use app\index\model\ProjectUser;
 use app\index\validate\Bug as BugValidate;
+use app\job\BugJob;
+use think\Queue;
 
 class Bug
 {
@@ -109,6 +112,8 @@ class Bug
         if($add)
         {
 
+            static::notifyUser(BugJob::class,$model->id,'项目'.$model->project->project_name.'新增BUG','项目'.$model->project->project_name.'新增BUG成功');
+
             return ServiceResult::Success(['id'=>$model->id],'创建成功');
 
         }else{
@@ -160,6 +165,8 @@ class Bug
 
         $log->commit();
 
+        static::notifyUser(BugJob::class,$bug_id,'处理BUG '.$bug->bug_title.'【id:'.$bug_id.'】','处理BUG【id:'.$bug_id.'】');
+
         return ServiceResult::Success([],'提交成功');
 
     }
@@ -206,6 +213,9 @@ class Bug
         {
             $bug->commit();
 
+            static::notifyUser(BugJob::class,$id,'处理BUG '.$bug->bug_title.'【id:'.$id.'】','处理BUG'.$bug->bug_title);
+
+
             return ServiceResult::Success([],'修改成功');
         }else{
             $bug->rollback();
@@ -213,5 +223,22 @@ class Bug
             return ServiceResult::Error('修改失败');
         }
 
+    }
+
+
+
+
+    public static function notifyUser($jobClassName,$bugId,$title,$content)
+    {
+        $bug = \app\index\model\Bug::where(['id'=>$bugId])->find();
+
+        $all = ProjectUser::all(['project_id'=>$bug->project_id]);
+
+        $userIds = array_column($all->toArray(),'user_id');
+
+        $data =  make_job($userIds,$title,BugEmailTemplate::getEmail($content));
+
+
+        Queue::push($jobClassName,$data);
     }
 }

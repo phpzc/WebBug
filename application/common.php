@@ -77,3 +77,17 @@ function make_url($requestUri = '')
     return (is_ssl() ? 'https://' : 'http://') . $_SERVER['HTTP_HOST'] . $requestUri;
 
 }
+
+
+/**
+ * 构建邮件任务数组结构  topthink-queue 2.0队列
+ *
+ * @param $userIdArray  用户id数组
+ * @param $title        邮件标题
+ * @param $content      邮件内容
+ * @return array
+ */
+function make_job($userIdArray,$title,$content)
+{
+    return compact('userIdArray','title','content');
+}
