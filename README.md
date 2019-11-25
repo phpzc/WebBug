@@ -1,6 +1,6 @@
 <h1 align="center">Welcome to WebBug 👋</h1>
 <p>
-  <img src="https://img.shields.io/badge/version-1.7-blue.svg?cacheSeconds=2592000" />
+  <img src="https://img.shields.io/badge/version-1.8-blue.svg?cacheSeconds=2592000" />
 </p>
 
 > WebBug 项目管理系统
