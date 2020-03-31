@@ -43,10 +43,10 @@
                                 {volist name="bugs" id="bug"}
                                 <tr>
                                     <td>{$bug.id}</td>
-                                    <td>{$bug->project->project_name}</td>
+                                    <td>{$bug->project ? $bug->project->project_name:''}</td>
                                     <td>{$bug.bug_title}</td>
-                                    <td>{$bug->module->module_name}</td>
-                                    <td>{$bug->version->version_name}</td>
+                                    <td>{$bug->module ? $bug->module->module_name : ''}</td>
+                                    <td>{$bug->version ? $bug->version->version_name : ''}</td>
                                     <td>{$bug->getBugStatusWord()}</td>
                                     <td>{$bug->create_time}</td>
                                     <td class="text-right">
